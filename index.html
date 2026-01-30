@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hokkaido Japan Map</title>
+    <title>Trail Camera - Hokkaido: Fire to Ice</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         * {
             margin: 0;
@@ -12,52 +14,1270 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
+        }
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(26,95,122,0.95) 0%, rgba(26,95,122,0.8) 100%);
+            padding: 12px 20px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header h1 {
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .header .subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.85rem;
+        }
+        .legend-toggle {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .legend-toggle:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .sidebar {
+            position: absolute;
+            top: 60px;
+            right: 10px;
+            z-index: 1000;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            width: 280px;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            display: none;
+        }
+        .sidebar.active {
+            display: block;
+        }
+        .sidebar-section {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .sidebar-section:last-child {
+            border-bottom: none;
+        }
+        .sidebar-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .legend-item.disabled {
+            opacity: 0.4;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+        .legend-label {
+            font-size: 0.85rem;
+            color: #333;
+        }
+        .legend-count {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: #999;
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .special-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+            font-size: 0.85rem;
+        }
+        .special-icon {
+            font-size: 1rem;
+        }
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+        }
+        .leaflet-popup-content {
+            margin: 0;
+            min-width: 280px;
+            max-width: 320px;
+        }
+        .popup-header {
+            padding: 12px 15px;
+            border-radius: 8px 8px 0 0;
             color: #fff;
         }
-        .container {
-            text-align: center;
-            padding: 2rem;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, #e94560, #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .subtitle {
-            font-size: 1.5rem;
-            color: #a0a0a0;
-            margin-bottom: 2rem;
-        }
-        .status {
-            display: inline-block;
-            padding: 0.75rem 2rem;
-            background: rgba(233, 69, 96, 0.2);
-            border: 1px solid #e94560;
-            border-radius: 50px;
+        .popup-header h3 {
             font-size: 1rem;
-            letter-spacing: 2px;
+            margin-bottom: 2px;
+        }
+        .popup-header .local-name {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .popup-badges {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        .popup-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.2);
+        }
+        .popup-body {
+            padding: 12px 15px;
+        }
+        .popup-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .popup-meta-item {
+            font-size: 0.8rem;
+        }
+        .popup-meta-item label {
+            color: #666;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .popup-meta-item span {
+            color: #333;
+            font-weight: 500;
+        }
+        .popup-features {
+            font-size: 0.85rem;
+            color: #444;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        .popup-notes {
+            font-size: 0.8rem;
+            color: #666;
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 6px;
+            line-height: 1.4;
+        }
+        .popup-notes strong {
+            color: #333;
+        }
+        .popup-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #1a5f7a;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .popup-link:hover {
+            text-decoration: underline;
+        }
+        .region-popup .popup-body {
+            padding: 15px;
+        }
+        .region-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .region-stat {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .region-stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a5f7a;
+        }
+        .region-stat-label {
+            font-size: 0.7rem;
+            color: #666;
             text-transform: uppercase;
         }
-        .map-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+        .transport-popup {
+            min-width: 250px;
+        }
+        .transport-popup .popup-header {
+            background: #6c757d;
+        }
+        .transport-route {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .transport-point {
+            text-align: center;
+        }
+        .transport-point .city {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .transport-arrow {
+            color: #999;
+            font-size: 1.2rem;
+        }
+        .priority-high {
+            border-left: 4px solid #dc3545;
+        }
+        .priority-medium {
+            border-left: 4px solid #ffc107;
+        }
+        .priority-low {
+            border-left: 4px solid #6c757d;
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1rem;
+            }
+            .header .subtitle {
+                display: none;
+            }
+            .sidebar {
+                width: calc(100% - 20px);
+                right: 10px;
+                left: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="map-icon">🗾</div>
-        <h1>Hokkaido Japan Map</h1>
-        <p class="subtitle">Interactive Production Planning Map</p>
-        <span class="status">Coming Soon</span>
+    <div class="header">
+        <div class="header-left">
+            <h1>Trail Camera - Hokkaido: Fire to Ice</h1>
+            <span class="subtitle">Late January - Early February 2026</span>
+        </div>
+        <button class="legend-toggle" onclick="toggleSidebar()">Legend</button>
     </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+            <h3>Categories</h3>
+            <div id="category-legend"></div>
+        </div>
+        <div class="sidebar-section">
+            <h3>Special Designations</h3>
+            <div class="special-item"><span class="special-icon">🏛️</span> UNESCO World Heritage Site</div>
+            <div class="special-item"><span class="special-icon">🏞️</span> National Park</div>
+            <div class="special-item"><span class="special-icon">⭐</span> Jaron Proposed</div>
+            <div class="special-item"><span class="special-icon">🔍</span> Producer Discovery</div>
+        </div>
+        <div class="sidebar-section">
+            <h3>Layers</h3>
+            <div class="legend-item" onclick="toggleLayer('transport')">
+                <div class="legend-color" style="background: #6c757d;"></div>
+                <span class="legend-label">Transportation Routes</span>
+            </div>
+            <div class="legend-item" onclick="toggleLayer('regions')">
+                <div class="legend-color" style="background: #ffc107;"></div>
+                <span class="legend-label">Regional Overviews</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        // Category definitions
+        const categories = {
+            'Landscape/Nature': { color: '#28a745', description: 'Natural landmarks, volcanic areas, lakes, parks, scenic viewpoints' },
+            'Food/Culture': { color: '#dc3545', description: 'Restaurants, markets, food experiences, cultural dining' },
+            'Architecture': { color: '#fd7e14', description: 'Historic buildings, Western-style structures, traditional streetscapes' },
+            'Onsen/Hot Spring': { color: '#e83e8c', description: 'Hot spring areas, bathing experiences, geothermal sites' },
+            'Winter Activity': { color: '#17a2b8', description: 'Ski resorts, ice fishing, frozen lake activities' },
+            'Transport Hub': { color: '#6c757d', description: 'Train stations, airports, major transit points' },
+            'Regional Overview': { color: '#ffc107', description: 'City/area summary markers for navigation' },
+            'Wildlife': { color: '#20c997', description: 'Animal encounters, nature experiences with wildlife' }
+        };
+
+        // Regional overviews
+        const regions = [
+            {
+                name: 'Tokyo',
+                coords: [35.6812, 139.7671],
+                dateRange: 'Day 1 (Departure)',
+                locationCount: 1,
+                themes: 'Departure point, Shinkansen experience begins',
+                hub: 'Tokyo Station - Tohoku/Hokkaido Shinkansen departure',
+                budget: 'Transit only'
+            },
+            {
+                name: 'Tohoku',
+                coords: [38.5000, 140.5000],
+                dateRange: 'Days 1-3',
+                locationCount: 8,
+                themes: 'Spirited Away fantasy (Ginzan Onsen), Snow Monsters, Three Great Noodles, samurai history, train journey storytelling',
+                hub: 'Sendai or Morioka Station - both on Tohoku Shinkansen mainline',
+                budget: '$800-1200'
+            },
+            {
+                name: 'Hakodate Area',
+                coords: [41.7739, 140.7267],
+                dateRange: 'Days 3-5',
+                locationCount: 11,
+                themes: 'East meets West architecture, morning market live squid fishing, million-dollar night view, hot spring monkeys, frozen lake activities',
+                hub: 'Hakodate Station - Hokkaido Shinkansen terminus, tram system',
+                budget: '$600-900'
+            },
+            {
+                name: 'Lake Toya-Noboribetsu',
+                coords: [42.5500, 141.0000],
+                dateRange: 'Days 5-6',
+                locationCount: 6,
+                themes: 'Volcanic drama, Hell Valley, active geology, "Hokkaido\'s Fuji," healing waters',
+                hub: 'Rental car recommended or JR to Noboribetsu Station + bus',
+                budget: '$400-600'
+            },
+            {
+                name: 'Otaru',
+                coords: [43.1972, 141.0028],
+                dateRange: 'Day 6-7',
+                locationCount: 3,
+                themes: 'Historic canal, sushi capital, romantic winter atmosphere, glasswork',
+                hub: 'Otaru Station - 30min from Sapporo on JR',
+                budget: '$300-400'
+            },
+            {
+                name: 'Sapporo',
+                coords: [43.0621, 141.3544],
+                dateRange: 'Days 7-9',
+                locationCount: 6,
+                themes: 'Urban finale, miso ramen birthplace, beer history, snow festival (if timing aligns), nightlife',
+                hub: 'Sapporo Station - hub for all Hokkaido rail, subway system',
+                budget: '$500-700'
+            },
+            {
+                name: 'Niseko-Rusutsu',
+                coords: [42.8047, 140.7000],
+                dateRange: 'Optional Day 8-9',
+                locationCount: 2,
+                themes: 'World-class powder skiing, Mount Yotei views, international ski culture',
+                hub: 'Rental car from Sapporo or resort shuttle buses',
+                budget: '$400-800'
+            }
+        ];
+
+        // All locations
+        const locations = [
+            {
+                name: 'Tokyo Station',
+                nameLocal: '東京駅',
+                category: 'Transport Hub',
+                region: 'Tokyo',
+                coords: [35.6812, 139.7671],
+                dates: 'Day 1 morning',
+                bestTime: 'Early morning (6:00-7:00 AM)',
+                admission: 'Free',
+                permits: 'No - public station',
+                features: 'Departure point for the journey. The Tohoku/Hokkaido Shinkansen platforms offer dramatic shots of bullet trains. The station\'s red brick facade (Marunouchi side) provides establishing shots.',
+                notes: 'Platform 20-23 for Tohoku Shinkansen. Arrive early for tripod shots before rush hour. B-roll of bento boxes, station energy.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=35.6812,139.7671',
+                priority: 'Medium'
+            },
+            {
+                name: 'Ginzan Onsen',
+                nameLocal: '銀山温泉',
+                category: 'Onsen/Hot Spring',
+                region: 'Tohoku',
+                coords: [38.5697, 140.5311],
+                dates: 'Day 1-2 overnight',
+                bestTime: 'Blue hour and night (5:00-8:00 PM)',
+                admission: 'Free to walk; Ryokan ¥25,000-50,000/night',
+                permits: 'Yes - nighttime entry tickets required after 5pm Dec-Mar',
+                features: 'Believed inspiration for Spirited Away bathhouse. Taisho-era wooden buildings along river, gas-lit streets, heavy snowfall. Most photogenic onsen town in Japan.',
+                notes: 'CRITICAL: Book overnight stay 6-12 months in advance for winter. Day visitors face strict shuttle system Dec 20 - Mar 1. Gas lamps create warm golden glow against blue snow.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=38.5697,140.5311',
+                priority: 'High'
+            },
+            {
+                name: 'Zao Onsen - Snow Monsters',
+                nameLocal: '蔵王温泉 樹氷',
+                category: 'Landscape/Nature',
+                region: 'Tohoku',
+                coords: [38.1639, 140.3969],
+                dates: 'Day 2 (if routing through Yamagata)',
+                bestTime: 'Night ropeway (5:00-9:00 PM) or dawn',
+                admission: 'Ropeway ¥3,500 (~$24)',
+                permits: 'No',
+                features: '"Juhyo" - trees completely encased in ice and snow creating alien-like formations. One of Japan\'s most unique winter phenomena.',
+                notes: 'Peak viewing Jan-Feb. Night ropeway operates specific dates. Snow monsters form only when conditions align. 40min bus from Yamagata Station.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=38.1639,140.3969',
+                priority: 'Medium'
+            },
+            {
+                name: 'Sendai - Zuihoden Mausoleum',
+                nameLocal: '瑞鳳殿',
+                category: 'Architecture',
+                region: 'Tohoku',
+                coords: [38.2487, 140.8708],
+                dates: 'Day 2 (if stopping in Sendai)',
+                bestTime: 'Morning (9:00-11:00 AM)',
+                admission: '¥570 (~$4)',
+                permits: 'No',
+                features: 'Ornate mausoleum of Date Masamune, the legendary one-eyed samurai lord. Elaborate gold, black and colored decorations. Dramatic in snow.',
+                notes: '15min bus from Sendai Station. Forested hillside setting. Samurai history narrative opportunity.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=38.2487,140.8708',
+                priority: 'Low'
+            },
+            {
+                name: 'Sendai - Gyutan Restaurant Row',
+                nameLocal: '牛タン通り',
+                category: 'Food/Culture',
+                region: 'Tohoku',
+                coords: [38.2601, 140.8825],
+                dates: 'Day 2 lunch',
+                bestTime: 'Lunch service (11:30 AM - 1:30 PM)',
+                admission: '¥1,500-2,500 per meal (~$10-17)',
+                permits: 'Restaurant permission for filming',
+                features: 'Sendai\'s signature dish - thick-cut grilled beef tongue with smoky, robust flavor. Served with barley rice and oxtail soup.',
+                notes: 'Gyutan-dori in Sendai Station has multiple restaurants. Ask permission before filming in kitchen. Chris/Jordan competitive eating angle?',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=38.2601,140.8825',
+                priority: 'Low'
+            },
+            {
+                name: 'Morioka Station Area',
+                nameLocal: '盛岡駅',
+                category: 'Transport Hub',
+                region: 'Tohoku',
+                coords: [39.7016, 141.1345],
+                dates: 'Day 2-3',
+                bestTime: 'Any',
+                admission: 'Free',
+                permits: 'No',
+                features: 'Junction point where Tohoku Shinkansen continues to Hokkaido or branches to Akita. Gateway to Iwate Prefecture.',
+                notes: 'Strategic transit point. Can overnight here for Wanko Soba experience. 2h10min from Tokyo, 2h to Shin-Hakodate-Hokuto.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=39.7016,141.1345',
+                priority: 'Medium'
+            },
+            {
+                name: 'Azumaya Honten - Wanko Soba',
+                nameLocal: '東家本店',
+                category: 'Food/Culture',
+                region: 'Tohoku',
+                coords: [39.7039, 141.1367],
+                dates: 'Day 2-3 lunch',
+                bestTime: 'Lunch (11:00 AM - 2:00 PM)',
+                admission: '¥3,900 for challenge (~$26)',
+                permits: 'Yes - contact restaurant; reservations essential',
+                features: 'Morioka\'s famous all-you-can-eat soba challenge. Servers continuously refill small bowls chanting "Hai, janjan!" Goal: 100+ bowls.',
+                notes: 'GREAT CONTENT: Chris vs Jordan competition? Established 1907. 15 bowls = 1 regular serving. Condiments include tuna sashimi, mushrooms, wasabi.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=39.7039,141.1367',
+                priority: 'High'
+            },
+            {
+                name: 'Seikan Tunnel Museum Tappi',
+                nameLocal: '青函トンネル記念館',
+                category: 'Architecture',
+                region: 'Tohoku',
+                coords: [41.2553, 140.3392],
+                dates: 'Optional - requires detour',
+                bestTime: 'Morning (9:00 AM - 12:00 PM)',
+                admission: '¥2,200 total (~$15)',
+                permits: 'Contact museum for filming',
+                features: 'World\'s longest undersea tunnel (53.85km). Cable car descends 140m below sea level to walk through service tunnel.',
+                notes: 'OFF-SEASON during winter shoot window - may not be accessible. Open April 25 - November 10 only.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=41.2553,140.3392',
+                priority: 'Low'
+            },
+            {
+                name: 'Shin-Hakodate-Hokuto Station',
+                nameLocal: '新函館北斗駅',
+                category: 'Transport Hub',
+                region: 'Hakodate Area',
+                coords: [41.9044, 140.6478],
+                dates: 'Day 3 arrival',
+                bestTime: 'Any',
+                admission: 'Free',
+                permits: 'No',
+                features: 'Current northern terminus of Hokkaido Shinkansen. The moment of arrival in Hokkaido - dramatic transition.',
+                notes: '4h25min from Tokyo. Transfer point to local trains or bus to Hakodate city (20min).',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=41.9044,140.6478',
+                priority: 'Medium'
+            },
+            {
+                name: 'Mount Hakodate Ropeway',
+                nameLocal: '函館山ロープウェイ',
+                category: 'Landscape/Nature',
+                region: 'Hakodate Area',
+                coords: [41.7581, 140.7022],
+                dates: 'Day 3 evening',
+                bestTime: 'Arrive 30min before sunset',
+                admission: '¥1,800 round trip (~$12)',
+                permits: 'Tripod may require permission',
+                features: '"Million Dollar Night View" - rated 3-star by Michelin Green Guide. City lights pinched between two dark seas. WINTER IS PEAK SEASON.',
+                notes: '3-min cable car to 334m summit. Gets crowded at sunset - arrive early. Heated observation deck. Restaurant at summit.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=41.7581,140.7022',
+                priority: 'High'
+            },
+            {
+                name: 'Hakodate Morning Market',
+                nameLocal: '函館朝市',
+                category: 'Food/Culture',
+                region: 'Hakodate Area',
+                coords: [41.7731, 140.7281],
+                dates: 'Day 4 early morning',
+                bestTime: 'Dawn to 9:00 AM',
+                admission: 'Free entry; food ¥500-3,000',
+                permits: 'Ask individual vendors',
+                features: '250+ shops selling fresh seafood. UNIQUE: Live Squid Fishing Pond - catch your own squid, eat as ultra-fresh sashimi.',
+                notes: 'CONTENT GOLD: Live squid fishing is interactive and visual. Go early (before 7AM) for best selection.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=41.7731,140.7281',
+                priority: 'High'
+            },
+            {
+                name: 'Motomachi Historic District',
+                nameLocal: '元町',
+                category: 'Architecture',
+                region: 'Hakodate Area',
+                coords: [41.7650, 140.7108],
+                dates: 'Day 4 morning/afternoon',
+                bestTime: 'Morning for churches, afternoon for harbor',
+                admission: 'Free (some buildings charge entry)',
+                permits: 'No for exteriors',
+                features: 'Western-style architecture from late 1800s. Hilly cobblestone streets, ocean views. Mix of Russian Orthodox, Catholic, Protestant churches.',
+                notes: 'East-meets-West narrative opportunity. Hachimanzaka slope is famous photo spot.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=41.7650,140.7108',
+                priority: 'Medium'
+            },
+            {
+                name: 'Hakodate Orthodox Church',
+                nameLocal: '函館ハリストス正教会',
+                category: 'Architecture',
+                region: 'Hakodate Area',
+                coords: [41.7644, 140.7114],
+                dates: 'Day 4',
+                bestTime: 'Night for dramatic lighting; morning for interior',
+                admission: '¥200 donation (~$1.50)',
+                permits: 'No interior filming during services',
+                features: 'Russian Orthodox church with distinctive white walls and green roof. Bells designated "Japan\'s 100 Sounds."',
+                notes: 'Part of Motomachi walking route. Russian influence in Hokkaido story angle.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=41.7644,140.7114',
+                priority: 'Medium'
+            },
+            {
+                name: 'Goryokaku Fort & Tower',
+                nameLocal: '五稜郭タワー',
+                category: 'Architecture',
+                region: 'Hakodate Area',
+                coords: [41.7964, 140.7569],
+                dates: 'Day 4',
+                bestTime: 'Morning for tower views; dusk for illumination',
+                admission: 'Tower ¥1,000 (~$7); Fort grounds free',
+                permits: 'No',
+                features: 'Star-shaped Western-style fort (1866). Goryokaku Tower (107m) provides aerial view. Site of last battle of Boshin War.',
+                notes: 'Tower shows star shape clearly. Winter snow creates stark geometric contrast. History of Japan\'s Meiji transition.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=41.7964,140.7569',
+                priority: 'Medium'
+            },
+            {
+                name: 'Kanemori Red Brick Warehouse',
+                nameLocal: '金森赤レンガ倉庫',
+                category: 'Architecture',
+                region: 'Hakodate Area',
+                coords: [41.7689, 140.7156],
+                dates: 'Day 4',
+                bestTime: 'Blue hour/night for reflections',
+                admission: 'Free entry; shops inside',
+                permits: 'No for exteriors',
+                features: '1869 warehouse district, Hokkaido Heritage Site. Red bricks + white snow + bay backdrop. Night illumination.',
+                notes: 'Waterfront location. Shopping/cafe break opportunity. Good B-roll of historic commerce area.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=41.7689,140.7156',
+                priority: 'Low'
+            },
+            {
+                name: 'Yunokawa Onsen - Hot Spring Monkeys',
+                nameLocal: '湯の川温泉 熱帯植物園',
+                category: 'Wildlife',
+                region: 'Hakodate Area',
+                coords: [41.7831, 140.8039],
+                dates: 'Day 4 afternoon',
+                bestTime: 'Midday when monkeys most active',
+                admission: '¥300 (~$2)',
+                permits: 'No',
+                features: 'Japanese macaques bathing in their own onsen - December to May only. Less crowded than famous Nagano snow monkeys.',
+                notes: 'VISUAL GOLD: Monkeys in hot spring. 5min from Hakodate Airport, 20min by tram from Hakodate Station.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=41.7831,140.8039',
+                priority: 'High'
+            },
+            {
+                name: 'Onuma Quasi-National Park',
+                nameLocal: '大沼国定公園',
+                category: 'Winter Activity',
+                region: 'Hakodate Area',
+                coords: [41.9889, 140.6653],
+                dates: 'Day 5',
+                bestTime: 'Morning for activities; afternoon for Mt. Komagatake',
+                admission: 'Free entry; Activities ¥600-3,000',
+                permits: 'No - book activities with operators',
+                features: 'Frozen Lake Onuma becomes winter playground. Wakasagi ice fishing - drill hole, catch fish, eat as tempura. Sleigh tours. Snowmobiling.',
+                notes: '25min from Hakodate by JR. Ice fishing includes rod rental, bait, cooking. Sleigh tour ~2km across frozen lake.',
+                unesco: false,
+                nationalPark: true,
+                mapsUrl: 'https://maps.google.com/?q=41.9889,140.6653',
+                priority: 'High'
+            },
+            {
+                name: 'Noboribetsu Hell Valley',
+                nameLocal: '登別地獄谷',
+                category: 'Landscape/Nature',
+                region: 'Lake Toya-Noboribetsu',
+                coords: [42.4933, 141.1478],
+                dates: 'Day 5-6',
+                bestTime: 'Any - steam is dramatic always; night for illuminated path',
+                admission: 'Free; Parking ¥500',
+                permits: 'No - open public area',
+                features: 'Volcanic crater valley with steaming vents, sulfurous streams, 10,000+ tons of mineral water daily. Looks like another planet.',
+                notes: '5min walk from bus terminal. 20-min loop trail on boardwalk. "Onibi no Michi" illuminated nightly. Oni (demon) statues throughout.',
+                unesco: false,
+                nationalPark: true,
+                mapsUrl: 'https://maps.google.com/?q=42.4933,141.1478',
+                priority: 'High'
+            },
+            {
+                name: 'Oyunuma Pond & Natural Footbath',
+                nameLocal: '大湯沼',
+                category: 'Onsen/Hot Spring',
+                region: 'Lake Toya-Noboribetsu',
+                coords: [42.4978, 141.1483],
+                dates: 'Day 5-6',
+                bestTime: 'Morning for steam effects',
+                admission: 'Free',
+                permits: 'No',
+                features: 'Sulfuric pond with 50°C surface temperature. Oyunumagawa River flows from pond. Natural footbath (ashiyu) along river.',
+                notes: '20-30 min walk from Hell Valley. Trail may be closed in heavy snow. Bring towel for footbath.',
+                unesco: false,
+                nationalPark: true,
+                mapsUrl: 'https://maps.google.com/?q=42.4978,141.1483',
+                priority: 'Medium'
+            },
+            {
+                name: 'Lake Toya',
+                nameLocal: '洞爺湖',
+                category: 'Landscape/Nature',
+                region: 'Lake Toya-Noboribetsu',
+                coords: [42.6103, 140.8567],
+                dates: 'Day 6',
+                bestTime: 'Morning for Mount Yotei reflections',
+                admission: 'Free',
+                permits: 'No',
+                features: 'Caldera lake with views of Mount Yotei ("Hokkaido\'s Fuji"). Semi-frozen in winter. Toyako Onsen has winter fireworks.',
+                notes: 'Between Noboribetsu and Niseko. Lake cruise boats year-round. Waterfront promenade with free footbaths.',
+                unesco: false,
+                nationalPark: true,
+                mapsUrl: 'https://maps.google.com/?q=42.6103,140.8567',
+                priority: 'Medium'
+            },
+            {
+                name: 'Mount Yotei',
+                nameLocal: '羊蹄山',
+                category: 'Landscape/Nature',
+                region: 'Lake Toya-Noboribetsu',
+                coords: [42.8264, 140.8119],
+                dates: 'Day 6 (views from multiple locations)',
+                bestTime: 'Clear morning for sunrise on peak',
+                admission: 'Free (viewing)',
+                permits: 'No',
+                features: '"Hokkaido\'s Fuji" - 1,898m symmetrical volcanic cone. Snow-capped in winter. Visible from Niseko, Rusutsu, Lake Toya.',
+                notes: 'Not climbable in winter. Best captured from surrounding areas. Clear days essential. Sunrise/sunset creates alpenglow.',
+                unesco: false,
+                nationalPark: true,
+                mapsUrl: 'https://maps.google.com/?q=42.8264,140.8119',
+                priority: 'Medium'
+            },
+            {
+                name: 'Showa Shinzan',
+                nameLocal: '昭和新山',
+                category: 'Landscape/Nature',
+                region: 'Lake Toya-Noboribetsu',
+                coords: [42.5428, 140.8583],
+                dates: 'Day 6',
+                bestTime: 'Any - steam always visible',
+                admission: 'Free viewing; Usuzan Ropeway ¥1,800',
+                permits: 'No',
+                features: '"Young volcano" born 1943-1945, still growing 30cm/year. Warm volcanic ash accessible at base. Living geology you can touch.',
+                notes: 'Adjacent to Usuzan Ropeway. 15min from Lake Toya. Can feel warmth from ground.',
+                unesco: false,
+                nationalPark: true,
+                mapsUrl: 'https://maps.google.com/?q=42.5428,140.8583',
+                priority: 'Medium'
+            },
+            {
+                name: 'Otaru Canal',
+                nameLocal: '小樽運河',
+                category: 'Architecture',
+                region: 'Otaru',
+                coords: [43.1972, 141.0028],
+                dates: 'Day 6-7',
+                bestTime: 'Blue hour/night for gas lamp reflections',
+                admission: 'Free',
+                permits: 'No',
+                features: 'Historic canal with stone warehouses, gas lamps, stone walking paths. Winter snow creates romantic atmosphere.',
+                notes: '10min walk from Otaru Station. Most photographed spot in Otaru. Sushi Street nearby.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.1972,141.0028',
+                priority: 'Medium'
+            },
+            {
+                name: 'Otaru Sushi Street',
+                nameLocal: '小樽寿司屋通り',
+                category: 'Food/Culture',
+                region: 'Otaru',
+                coords: [43.1950, 140.9975],
+                dates: 'Day 6-7',
+                bestTime: 'Lunch (11:30 AM - 2:00 PM)',
+                admission: '¥2,000-5,000 per meal',
+                permits: 'Ask restaurant permission',
+                features: 'Street of sushi restaurants serving ultra-fresh Hokkaido seafood. Sea urchin, salmon roe, crab are specialties.',
+                notes: 'Near canal area. Hokkaido seafood is notably sweeter, richer. Uni particularly renowned.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.1950,140.9975',
+                priority: 'Medium'
+            },
+            {
+                name: 'Otaru Station',
+                nameLocal: '小樽駅',
+                category: 'Transport Hub',
+                region: 'Otaru',
+                coords: [43.1967, 140.9942],
+                dates: 'Day 6-7',
+                bestTime: 'Any',
+                admission: 'Free',
+                permits: 'No',
+                features: 'Historic station with platform lamps, retro atmosphere. 30min from Sapporo on JR.',
+                notes: 'Scenic JR ride along coast from Sapporo. Station building has nostalgic feel.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.1967,140.9942',
+                priority: 'Low'
+            },
+            {
+                name: 'Sapporo Station',
+                nameLocal: '札幌駅',
+                category: 'Transport Hub',
+                region: 'Sapporo',
+                coords: [43.0686, 141.3508],
+                dates: 'Day 7-9',
+                bestTime: 'Any',
+                admission: 'Free',
+                permits: 'No',
+                features: 'Hokkaido\'s largest transit hub. JR Tower with 38F observation deck. Hub for all Hokkaido rail.',
+                notes: 'Observation deck ¥740. Connected to underground shopping. Airport express to New Chitose (37min).',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.0686,141.3508',
+                priority: 'Low'
+            },
+            {
+                name: 'Odori Park',
+                nameLocal: '大通公園',
+                category: 'Landscape/Nature',
+                region: 'Sapporo',
+                coords: [43.0603, 141.3544],
+                dates: 'Day 7-8',
+                bestTime: 'Day for park; SNOW FESTIVAL (early Feb) is epic',
+                admission: 'Free',
+                permits: 'Snow Festival may have media registration',
+                features: '1.5km urban park spanning 12 blocks. Site of Sapporo Snow Festival with massive snow/ice sculptures.',
+                notes: 'SNOW FESTIVAL (Feb 4-11, 2026) is MUST-SHOOT if timing aligns. Millions of visitors, incredible sculptures.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.0603,141.3544',
+                priority: 'High'
+            },
+            {
+                name: 'Sapporo TV Tower',
+                nameLocal: 'さっぽろテレビ塔',
+                category: 'Architecture',
+                region: 'Sapporo',
+                coords: [43.0611, 141.3567],
+                dates: 'Day 7-8',
+                bestTime: 'Dusk for city lights transition',
+                admission: '¥1,000 (~$7)',
+                permits: 'No',
+                features: '147m tower at east end of Odori Park. Observation deck at 90m with 360-degree city views.',
+                notes: 'Good for establishing shots. Night photography of Odori Park from above. Clear days show mountains.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.0611,141.3567',
+                priority: 'Low'
+            },
+            {
+                name: 'Sapporo Beer Museum',
+                nameLocal: 'サッポロビール博物館',
+                category: 'Food/Culture',
+                region: 'Sapporo',
+                coords: [43.0697, 141.3653],
+                dates: 'Day 8',
+                bestTime: 'Afternoon for tours; evening for beer garden',
+                admission: 'Free museum; Tasting ¥500-800',
+                permits: 'Contact for filming permission',
+                features: 'Japan\'s only beer museum. History of Sapporo Beer (founded 1876). Beer hall serves Genghis Khan + beer combo.',
+                notes: '15min walk from Sapporo Station. English audio guide available. Classic Hokkaido experience.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.0697,141.3653',
+                priority: 'Medium'
+            },
+            {
+                name: 'Nijo Market',
+                nameLocal: '二条市場',
+                category: 'Food/Culture',
+                region: 'Sapporo',
+                coords: [43.0581, 141.3506],
+                dates: 'Day 8 morning',
+                bestTime: 'Early morning (6:00-9:00 AM)',
+                admission: 'Free entry; food ¥500-3,000',
+                permits: 'Ask vendor permission',
+                features: 'Century-old fish market in city center. Tsukko Meshi (salmon roe rice bowl) originated here.',
+                notes: 'Opens early (some stalls 6AM). Walking distance from Odori Park. More local feel than Hakodate.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.0581,141.3506',
+                priority: 'Medium'
+            },
+            {
+                name: 'Ganso Sapporo Ramen Yokocho',
+                nameLocal: '元祖さっぽろラーメン横丁',
+                category: 'Food/Culture',
+                region: 'Sapporo',
+                coords: [43.0547, 141.3533],
+                dates: 'Day 8 dinner',
+                bestTime: 'Evening (6:00-10:00 PM)',
+                admission: '¥800-1,500 per bowl',
+                permits: 'Ask individual shops',
+                features: 'Birthplace of miso ramen. 17 hole-in-the-wall shops in narrow alley. Perfect for cold weather.',
+                notes: 'In Susukino district. Shops are tiny (8-10 seats). Corn butter ramen is local specialty.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.0547,141.3533',
+                priority: 'High'
+            },
+            {
+                name: 'Susukino Entertainment District',
+                nameLocal: 'すすきの',
+                category: 'Food/Culture',
+                region: 'Sapporo',
+                coords: [43.0536, 141.3525],
+                dates: 'Day 8 night',
+                bestTime: 'Night (8:00 PM onwards)',
+                admission: 'Varies by venue',
+                permits: 'No for street filming',
+                features: 'Japan\'s northernmost entertainment district. Neon lights, izakayas, bars, karaoke. Ice sculptures during Snow Festival.',
+                notes: 'Safe area. Bar Yamazaki is oldest whisky bar. Good for nightlife B-roll. Connects to Ramen Alley.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=43.0536,141.3525',
+                priority: 'Low'
+            },
+            {
+                name: 'Niseko United Ski Resort',
+                nameLocal: 'ニセコユナイテッド',
+                category: 'Winter Activity',
+                region: 'Niseko-Rusutsu',
+                coords: [42.8633, 140.7000],
+                dates: 'Optional extension',
+                bestTime: 'Morning for fresh powder',
+                admission: 'Day pass ¥7,500-8,500 (~$50-57)',
+                permits: 'Media accreditation for commercial filming',
+                features: 'Japan\'s most famous international ski resort. 590 inches of ultra-dry powder annually. Four interconnected resorts.',
+                notes: '2-2.5 hours from Sapporo. Peak season Jan-Feb. Grand Hirafu has most nightlife. Very international crowd.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=42.8633,140.7000',
+                priority: 'Medium'
+            },
+            {
+                name: 'Rusutsu Resort',
+                nameLocal: 'ルスツリゾート',
+                category: 'Winter Activity',
+                region: 'Niseko-Rusutsu',
+                coords: [42.7489, 140.9003],
+                dates: 'Optional extension',
+                bestTime: 'Any - less crowded than Niseko',
+                admission: 'Day pass ¥6,500 (~$44)',
+                permits: 'Media accreditation for commercial filming',
+                features: 'Often rated Hokkaido\'s best ski resort. 550 inches of powder. Less crowded. Fantastic tree skiing.',
+                notes: 'More local/Japanese feel. Powder lasts longer due to fewer crowds. Three mountains. 20-30min from Niseko.',
+                unesco: false,
+                nationalPark: false,
+                mapsUrl: 'https://maps.google.com/?q=42.7489,140.9003',
+                priority: 'Medium'
+            }
+        ];
+
+        // Transportation segments
+        const transportSegments = [
+            { from: 'Tokyo', to: 'Ginzan Onsen', fromCoords: [35.6812, 139.7671], toCoords: [38.5697, 140.5311], mode: 'Train + Bus', duration: '3.5-4 hours', cost: '~$90', date: 'Day 1' },
+            { from: 'Ginzan Onsen', to: 'Morioka', fromCoords: [38.5697, 140.5311], toCoords: [39.7016, 141.1345], mode: 'Bus + Shinkansen', duration: '2.5-3 hours', cost: '~$40', date: 'Day 2' },
+            { from: 'Morioka', to: 'Shin-Hakodate-Hokuto', fromCoords: [39.7016, 141.1345], toCoords: [41.9044, 140.6478], mode: 'Hokkaido Shinkansen', duration: '2 hours', cost: '~$67', date: 'Day 3', notes: 'Through Seikan Tunnel - world\'s longest undersea tunnel' },
+            { from: 'Shin-Hakodate-Hokuto', to: 'Hakodate', fromCoords: [41.9044, 140.6478], toCoords: [41.7731, 140.7281], mode: 'JR Hakodate Liner', duration: '20-25 min', cost: '¥440', date: 'Day 3' },
+            { from: 'Hakodate', to: 'Onuma Park', fromCoords: [41.7731, 140.7281], toCoords: [41.9889, 140.6653], mode: 'JR', duration: '25-40 min', cost: '¥540-1,170', date: 'Day 5' },
+            { from: 'Hakodate Area', to: 'Noboribetsu', fromCoords: [41.7739, 140.7267], toCoords: [42.4933, 141.1478], mode: 'Train or Car', duration: '2.5-3 hours', cost: '~$50-60', date: 'Day 5' },
+            { from: 'Noboribetsu', to: 'Lake Toya', fromCoords: [42.4933, 141.1478], toCoords: [42.6103, 140.8567], mode: 'Car or Bus', duration: '45 min', cost: '~$10', date: 'Day 6' },
+            { from: 'Lake Toya', to: 'Otaru', fromCoords: [42.6103, 140.8567], toCoords: [43.1972, 141.0028], mode: 'Car', duration: '2 hours', cost: 'Tolls ~$15', date: 'Day 6' },
+            { from: 'Otaru', to: 'Sapporo', fromCoords: [43.1972, 141.0028], toCoords: [43.0686, 141.3508], mode: 'JR', duration: '30-45 min', cost: '¥750', date: 'Day 7' },
+            { from: 'Sapporo', to: 'New Chitose Airport', fromCoords: [43.0686, 141.3508], toCoords: [42.7752, 141.6925], mode: 'JR Airport Express', duration: '37 min', cost: '¥1,150', date: 'Day 9' },
+            { from: 'Sapporo', to: 'Niseko', fromCoords: [43.0686, 141.3508], toCoords: [42.8633, 140.7000], mode: 'Bus or Car', duration: '2-2.5 hours', cost: '~$20', date: 'Optional', notes: 'Day trip or overnight' }
+        ];
+
+        // Initialize map centered on Hokkaido
+        const map = L.map('map', {
+            zoomControl: false
+        }).setView([41.5, 140.5], 6);
+
+        // Add zoom control to bottom right
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // Add tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Layer groups
+        const categoryLayers = {};
+        const regionLayer = L.layerGroup();
+        const transportLayer = L.layerGroup();
+
+        // Initialize category layers
+        Object.keys(categories).forEach(cat => {
+            if (cat !== 'Regional Overview') {
+                categoryLayers[cat] = L.layerGroup().addTo(map);
+            }
+        });
+
+        // Create custom marker icon
+        function createMarkerIcon(color, priority) {
+            const size = priority === 'High' ? 14 : 10;
+            const border = priority === 'High' ? 3 : 2;
+            return L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${color};
+                    border: ${border}px solid rgba(255,255,255,0.9);
+                    border-radius: 50%;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                "></div>`,
+                iconSize: [size + border*2, size + border*2],
+                iconAnchor: [(size + border*2)/2, (size + border*2)/2]
+            });
+        }
+
+        // Create region marker icon
+        function createRegionIcon() {
+            return L.divIcon({
+                className: 'region-marker',
+                html: `<div style="
+                    width: 24px;
+                    height: 24px;
+                    background: #ffc107;
+                    border: 3px solid rgba(255,255,255,0.9);
+                    border-radius: 50%;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 12px;
+                ">📍</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+        }
+
+        // Create location popup content
+        function createPopupContent(loc) {
+            const catColor = categories[loc.category]?.color || '#666';
+            const priorityClass = `priority-${loc.priority.toLowerCase()}`;
+
+            let badges = '';
+            if (loc.nationalPark) badges += '<span class="popup-badge">🏞️ National Park</span>';
+            if (loc.unesco) badges += '<span class="popup-badge">🏛️ UNESCO</span>';
+
+            return `
+                <div class="location-popup ${priorityClass}">
+                    <div class="popup-header" style="background: ${catColor}">
+                        <h3>${loc.name}</h3>
+                        <div class="local-name">${loc.nameLocal}</div>
+                        <div class="popup-badges">
+                            <span class="popup-badge">${loc.category}</span>
+                            <span class="popup-badge">${loc.priority} Priority</span>
+                            ${badges}
+                        </div>
+                    </div>
+                    <div class="popup-body">
+                        <div class="popup-meta">
+                            <div class="popup-meta-item">
+                                <label>Dates</label>
+                                <span>${loc.dates}</span>
+                            </div>
+                            <div class="popup-meta-item">
+                                <label>Best Time</label>
+                                <span>${loc.bestTime}</span>
+                            </div>
+                            <div class="popup-meta-item">
+                                <label>Admission</label>
+                                <span>${loc.admission}</span>
+                            </div>
+                            <div class="popup-meta-item">
+                                <label>Permits</label>
+                                <span>${loc.permits}</span>
+                            </div>
+                        </div>
+                        <div class="popup-features">${loc.features}</div>
+                        <div class="popup-notes"><strong>Production Notes:</strong> ${loc.notes}</div>
+                        <a href="${loc.mapsUrl}" target="_blank" class="popup-link">Open in Google Maps →</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create region popup content
+        function createRegionPopupContent(region) {
+            return `
+                <div class="region-popup">
+                    <div class="popup-header" style="background: #1a5f7a">
+                        <h3>${region.name} Region</h3>
+                        <div class="popup-badges">
+                            <span class="popup-badge">${region.dateRange}</span>
+                        </div>
+                    </div>
+                    <div class="popup-body">
+                        <div class="region-stats">
+                            <div class="region-stat">
+                                <div class="region-stat-value">${region.locationCount}</div>
+                                <div class="region-stat-label">Locations</div>
+                            </div>
+                            <div class="region-stat">
+                                <div class="region-stat-value">${region.budget}</div>
+                                <div class="region-stat-label">Est. Budget</div>
+                            </div>
+                        </div>
+                        <div class="popup-features"><strong>Key Themes:</strong> ${region.themes}</div>
+                        <div class="popup-notes" style="margin-top: 10px;"><strong>Logistics Hub:</strong> ${region.hub}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create transport popup content
+        function createTransportPopupContent(segment) {
+            let notesHtml = segment.notes ? `<div class="popup-notes" style="margin-top: 10px;">${segment.notes}</div>` : '';
+            return `
+                <div class="transport-popup">
+                    <div class="popup-header">
+                        <h3>Transportation</h3>
+                        <div class="popup-badges">
+                            <span class="popup-badge">${segment.date}</span>
+                        </div>
+                    </div>
+                    <div class="popup-body">
+                        <div class="transport-route">
+                            <div class="transport-point">
+                                <div class="city">${segment.from}</div>
+                            </div>
+                            <div class="transport-arrow">→</div>
+                            <div class="transport-point">
+                                <div class="city">${segment.to}</div>
+                            </div>
+                        </div>
+                        <div class="popup-meta">
+                            <div class="popup-meta-item">
+                                <label>Mode</label>
+                                <span>${segment.mode}</span>
+                            </div>
+                            <div class="popup-meta-item">
+                                <label>Duration</label>
+                                <span>${segment.duration}</span>
+                            </div>
+                            <div class="popup-meta-item">
+                                <label>Cost</label>
+                                <span>${segment.cost}</span>
+                            </div>
+                        </div>
+                        ${notesHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add location markers
+        const categoryCounts = {};
+        locations.forEach(loc => {
+            const cat = loc.category;
+            if (!categoryCounts[cat]) categoryCounts[cat] = 0;
+            categoryCounts[cat]++;
+
+            const color = categories[cat]?.color || '#666';
+            const marker = L.marker(loc.coords, {
+                icon: createMarkerIcon(color, loc.priority)
+            });
+            marker.bindPopup(createPopupContent(loc), { maxWidth: 350 });
+
+            if (categoryLayers[cat]) {
+                marker.addTo(categoryLayers[cat]);
+            }
+        });
+
+        // Add region markers
+        regions.forEach(region => {
+            const marker = L.marker(region.coords, {
+                icon: createRegionIcon()
+            });
+            marker.bindPopup(createRegionPopupContent(region), { maxWidth: 320 });
+            marker.addTo(regionLayer);
+        });
+
+        // Add transport routes
+        transportSegments.forEach(segment => {
+            const polyline = L.polyline([segment.fromCoords, segment.toCoords], {
+                color: '#6c757d',
+                weight: 2,
+                opacity: 0.6,
+                dashArray: '5, 10'
+            });
+            polyline.bindPopup(createTransportPopupContent(segment), { maxWidth: 300 });
+            polyline.addTo(transportLayer);
+        });
+
+        // Add layers to map
+        regionLayer.addTo(map);
+        transportLayer.addTo(map);
+
+        // Build category legend
+        const legendContainer = document.getElementById('category-legend');
+        Object.keys(categories).forEach(cat => {
+            if (cat === 'Regional Overview') return;
+            const count = categoryCounts[cat] || 0;
+            const item = document.createElement('div');
+            item.className = 'legend-item';
+            item.dataset.category = cat;
+            item.innerHTML = `
+                <div class="legend-color" style="background: ${categories[cat].color}"></div>
+                <span class="legend-label">${cat}</span>
+                <span class="legend-count">${count}</span>
+            `;
+            item.onclick = () => toggleCategory(cat);
+            legendContainer.appendChild(item);
+        });
+
+        // Toggle functions
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function toggleCategory(cat) {
+            const layer = categoryLayers[cat];
+            const item = document.querySelector(`[data-category="${cat}"]`);
+            if (map.hasLayer(layer)) {
+                map.removeLayer(layer);
+                item.classList.add('disabled');
+            } else {
+                map.addLayer(layer);
+                item.classList.remove('disabled');
+            }
+        }
+
+        function toggleLayer(type) {
+            if (type === 'transport') {
+                if (map.hasLayer(transportLayer)) {
+                    map.removeLayer(transportLayer);
+                } else {
+                    map.addLayer(transportLayer);
+                }
+            } else if (type === 'regions') {
+                if (map.hasLayer(regionLayer)) {
+                    map.removeLayer(regionLayer);
+                } else {
+                    map.addLayer(regionLayer);
+                }
+            }
+        }
+
+        // Fit map to show all markers on load
+        const allCoords = locations.map(l => l.coords);
+        if (allCoords.length > 0) {
+            map.fitBounds(allCoords, { padding: [50, 50] });
+        }
+    </script>
 </body>
 </html>
