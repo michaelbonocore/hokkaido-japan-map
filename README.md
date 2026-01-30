@@ -1,4 +1,4 @@
-# Hokkaido Japan Map
+# PetaPixel's Hokkaido Adventure
 
 Interactive production planning map for Hokkaido, Japan.
 
