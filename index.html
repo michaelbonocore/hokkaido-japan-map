@@ -249,6 +249,28 @@
         .popup-button.secondary:hover {
             background: #d35400;
         }
+        .popup-recommendation {
+            font-size: 0.8rem;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+        .popup-recommendation.recommended {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        .popup-recommendation.not-recommended {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        .popup-recommendation.conditional {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        .popup-recommendation strong {
+            color: #333;
+        }
         .region-popup .popup-body {
             padding: 15px;
         }
@@ -599,7 +621,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=35.6812,139.7671',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: "Quick B-roll opportunity before boarding. Don't overthink it.",
+                recommendationType: 'recommended'
             },
             {
                 name: 'Ginzan Onsen',
@@ -618,7 +642,9 @@
                 mapsUrl: 'https://maps.google.com/?q=38.5697,140.5311',
                 readMoreUrl: 'https://www.nationalgeographic.com/travel/best-of-the-world-2026/article/yamagata-japan',
                 readMoreSource: 'National Geographic',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'NOT RECOMMENDED THIS TRIP — Ryokan booking window passed (need 6-12 months). Would add full day to Tohoku, compressing Hokkaido. Save for future Tohoku episode.',
+                recommendationType: 'not-recommended'
             },
             {
                 name: 'Zao Onsen - Snow Monsters',
@@ -637,7 +663,9 @@
                 mapsUrl: 'https://maps.google.com/?q=38.1639,140.3969',
                 readMoreUrl: 'https://www.cnn.com/travel/article/zao-onsen-japan',
                 readMoreSource: 'CNN Travel',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: "NOT RECOMMENDED THIS TRIP — Requires routing through Yamagata, adds a full day. Peak viewing is Jan-Feb (we're in March). Save for future Tohoku episode.",
+                recommendationType: 'not-recommended'
             },
             {
                 name: 'Sendai - Zuihoden Mausoleum',
@@ -654,7 +682,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=38.2487,140.8708',
-                priority: 'Low'
+                priority: 'Low',
+                recommendation: 'NOT RECOMMENDED THIS TRIP — Would require Sendai stopover. Save for future Tohoku episode.',
+                recommendationType: 'not-recommended'
             },
             {
                 name: 'Sendai - Gyutan Restaurant Row',
@@ -671,7 +701,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=38.2601,140.8825',
-                priority: 'Low'
+                priority: 'Low',
+                recommendation: 'NOT RECOMMENDED THIS TRIP — Would require Sendai stopover. Save for future Tohoku episode.',
+                recommendationType: 'not-recommended'
             },
             {
                 name: 'Morioka Station Area',
@@ -690,7 +722,9 @@
                 mapsUrl: 'https://maps.google.com/?q=39.7016,141.1345',
                 readMoreUrl: 'https://www.nytimes.com/interactive/2023/travel/52-places-travel-2023.html',
                 readMoreSource: 'NY Times',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'Transit hub — Day 1 arrival point. Use for orientation and luggage logistics.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Azumaya Honten - Wanko Soba',
@@ -709,7 +743,9 @@
                 mapsUrl: 'https://maps.google.com/?q=39.7039,141.1367',
                 readMoreUrl: 'https://www.cnn.com/travel/article/wanko-soba-challenge-japan',
                 readMoreSource: 'CNN Travel',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'HIGH PRIORITY — Core Day 1 competition content. Book reservation ASAP. Jaron vs Sarah challenge is the hook.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Seikan Tunnel Museum Tappi',
@@ -726,7 +762,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=41.2553,140.3392',
-                priority: 'Low'
+                priority: 'Low',
+                recommendation: 'NOT RECOMMENDED THIS TRIP — Museum closed in winter (April-November only). The tunnel transit itself is still a story beat.',
+                recommendationType: 'not-recommended'
             },
             {
                 name: 'Shin-Hakodate-Hokuto Station',
@@ -743,7 +781,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=41.9044,140.6478',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: "Transit point only — the 'arrival in Hokkaido' moment. Quick establishing shots, then transfer to Hakodate.",
+                recommendationType: 'recommended'
             },
             {
                 name: 'Mount Hakodate Ropeway',
@@ -762,7 +802,9 @@
                 mapsUrl: 'https://maps.google.com/?q=41.7581,140.7022',
                 readMoreUrl: 'https://www.japan.travel/en/spot/1922/',
                 readMoreSource: 'JNTO',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'HIGH PRIORITY — Day 2 hero shot. Arrive 30min before sunset. WEATHER DEPENDENT: If wind closes ropeway, no backup. Mt. Moiwa is our insurance later.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Hakodate Morning Market',
@@ -781,7 +823,9 @@
                 mapsUrl: 'https://maps.google.com/?q=41.7731,140.7281',
                 readMoreUrl: 'https://www.lonelyplanet.com/japan/hokkaido/hakodate/attractions/hakodate-morning-market',
                 readMoreSource: 'Lonely Planet',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'HIGH PRIORITY — Day 3 early morning. Live squid fishing is the visual hook. Go before 7am for best selection.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Motomachi Historic District',
@@ -800,7 +844,9 @@
                 mapsUrl: 'https://maps.google.com/?q=41.7650,140.7108',
                 readMoreUrl: 'https://www.japan.travel/en/spot/1902/',
                 readMoreSource: 'JNTO',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'RECOMMENDED — Day 2 afternoon walking content. East-meets-West architecture story. Combine with Orthodox Church.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Hakodate Orthodox Church',
@@ -817,7 +863,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=41.7644,140.7114',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'CONDITIONAL — Include if doing Motomachi walking segment. Russian influence story angle. Skip if Day 2 is running behind.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Goryokaku Fort & Tower',
@@ -836,7 +884,9 @@
                 mapsUrl: 'https://maps.google.com/?q=41.7964,140.7569',
                 readMoreUrl: 'https://www.lonelyplanet.com/japan/hokkaido/hakodate/attractions/hakodate-yama',
                 readMoreSource: 'Lonely Planet',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'CONDITIONAL — Good aerial view of star-shaped fort, but not essential. Include if Day 2 timing allows, skip if tight.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Kanemori Red Brick Warehouse',
@@ -855,7 +905,9 @@
                 mapsUrl: 'https://maps.google.com/?q=41.7689,140.7156',
                 readMoreUrl: 'https://www.visit-hokkaido.jp/en/spot/detail_10036.html',
                 readMoreSource: 'Visit Hokkaido',
-                priority: 'Low'
+                priority: 'Low',
+                recommendation: 'LOW PRIORITY — Nice B-roll at blue hour, but not a story driver. Skip if pressed for time.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Yunokawa Onsen - Hot Spring Monkeys',
@@ -874,7 +926,9 @@
                 mapsUrl: 'https://maps.google.com/?q=41.7831,140.8039',
                 readMoreUrl: 'https://www.visit-hokkaido.jp/en/spot/detail_10162.html',
                 readMoreSource: 'Visit Hokkaido',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'HIGH PRIORITY — Visual gold (monkeys in hot spring). Less crowded than famous Nagano location. Day 2 afternoon before ropeway.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Onuma Quasi-National Park',
@@ -893,7 +947,9 @@
                 mapsUrl: 'https://maps.google.com/?q=41.9889,140.6653',
                 readMoreUrl: 'https://travel.gaijinpot.com/onuma-park/',
                 readMoreSource: 'GaijinPot Travel',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'CONDITIONAL — Ice fishing + sleigh rides are good winter content, but adds 50min transit each way from Hakodate. Only if we have a slow Day 3 morning.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Noboribetsu Hell Valley',
@@ -912,7 +968,9 @@
                 mapsUrl: 'https://maps.google.com/?q=42.4933,141.1478',
                 readMoreUrl: 'https://www.japan.travel/en/spot/1881/',
                 readMoreSource: 'JNTO',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'CONDITIONAL — Dramatic volcanic landscape, but requires route change (not on direct Hakodate→Otaru path). Decision needed: worth the detour?',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Oyunuma Pond & Natural Footbath',
@@ -929,7 +987,9 @@
                 unesco: false,
                 nationalPark: true,
                 mapsUrl: 'https://maps.google.com/?q=42.4978,141.1483',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'CONDITIONAL — Only if doing Noboribetsu. Add-on to Hell Valley, not standalone destination.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Lake Toya',
@@ -948,7 +1008,9 @@
                 mapsUrl: 'https://maps.google.com/?q=42.6103,140.8567',
                 readMoreUrl: 'https://www.japan.travel/en/spot/2157/',
                 readMoreSource: 'JNTO',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: "CONDITIONAL — UNESCO Geopark, 'Hokkaido's Fuji' views. Only if routing through Noboribetsu area. Not essential.",
+                recommendationType: 'conditional'
             },
             {
                 name: 'Mount Yotei',
@@ -965,7 +1027,9 @@
                 unesco: false,
                 nationalPark: true,
                 mapsUrl: 'https://maps.google.com/?q=42.8264,140.8119',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'CONDITIONAL — Background views only (not climbable in winter). Capture from Niseko or Lake Toya if in area.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Showa Shinzan',
@@ -982,7 +1046,9 @@
                 unesco: false,
                 nationalPark: true,
                 mapsUrl: 'https://maps.google.com/?q=42.5428,140.8583',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: "CONDITIONAL — 'Young volcano' still growing. Only if doing Lake Toya route. Cool geology but not essential.",
+                recommendationType: 'conditional'
             },
             {
                 name: 'Otaru Canal',
@@ -1001,7 +1067,9 @@
                 mapsUrl: 'https://maps.google.com/?q=43.1972,141.0028',
                 readMoreUrl: 'https://www.japan-guide.com/e/e6701.html',
                 readMoreSource: 'Japan Guide',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'RECOMMENDED — Day 3 evening. Iconic shot with gas lamps and snow. Best at blue hour/night.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Otaru Sushi Street',
@@ -1018,7 +1086,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.1950,140.9975',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: "RECOMMENDED — Day 3 dinner. Fresh Hokkaido seafood story. Pick one restaurant, don't overthink it.",
+                recommendationType: 'recommended'
             },
             {
                 name: 'Otaru Station',
@@ -1035,7 +1105,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.1967,140.9942',
-                priority: 'Low'
+                priority: 'Low',
+                recommendation: 'Transit point — Nostalgic station building worth quick B-roll on arrival/departure.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Sapporo Station',
@@ -1052,7 +1124,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.0686,141.3508',
-                priority: 'Low'
+                priority: 'Low',
+                recommendation: 'Transit hub — Days 4-7 base. Observation deck optional (¥740) if weather is clear.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Odori Park',
@@ -1069,7 +1143,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.0603,141.3544',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'RECOMMENDED — Central park, good for establishing shots and transitions. TV Tower nearby.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Sapporo TV Tower',
@@ -1086,7 +1162,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.0611,141.3567',
-                priority: 'Low'
+                priority: 'Low',
+                recommendation: 'LOW PRIORITY — Standard city observation deck. Skip unless we need filler content.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Sapporo Beer Museum',
@@ -1105,7 +1183,9 @@
                 mapsUrl: 'https://maps.google.com/?q=43.0697,141.3653',
                 readMoreUrl: 'https://www.japan.travel/en/spot/1922/',
                 readMoreSource: 'JNTO',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: "HIGH PRIORITY — Day 5 core content. Japan's only beer museum. Opens 11am (not 10am). Contact for filming permission.",
+                recommendationType: 'recommended'
             },
             {
                 name: 'Nijo Market',
@@ -1124,7 +1204,9 @@
                 mapsUrl: 'https://maps.google.com/?q=43.0581,141.3506',
                 readMoreUrl: 'https://www.japan-guide.com/e/e5310.html',
                 readMoreSource: 'Japan Guide',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'CONDITIONAL — Century-old fish market, less touristy than Hakodate. Include if we want second market segment, otherwise skip.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Ganso Sapporo Ramen Yokocho',
@@ -1143,7 +1225,9 @@
                 mapsUrl: 'https://maps.google.com/?q=43.0547,141.3533',
                 readMoreUrl: 'https://www.japan-experience.com/all-about-japan/sapporo/food-and-drink/sapporo-ramen',
                 readMoreSource: 'Japan Experience',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'RECOMMENDED — Birthplace of miso ramen. 17 tiny shops. Good evening content in Susukino district.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Susukino Entertainment District',
@@ -1160,7 +1244,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.0536,141.3525',
-                priority: 'Low'
+                priority: 'Low',
+                recommendation: 'CONDITIONAL — Night B-roll of neon lights. Not a story driver, but atmosphere content if needed.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Niseko United Ski Resort',
@@ -1179,7 +1265,9 @@
                 mapsUrl: 'https://maps.google.com/?q=42.8633,140.7000',
                 readMoreUrl: 'https://www.outsideonline.com/adventure-travel/destinations/asia/niseko-japans-mythical-powder-paradise/',
                 readMoreSource: 'Outside Magazine',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'CONDITIONAL — World-class powder skiing, but 2-2.5hr from Sapporo. Higher production value than Asari, but eats schedule. DECISION NEEDED: casual ski day vs. destination ski content?',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Rusutsu Resort',
@@ -1198,7 +1286,9 @@
                 mapsUrl: 'https://maps.google.com/?q=42.7489,140.9003',
                 readMoreUrl: 'https://www.japan.travel/en/spot/1906/',
                 readMoreSource: 'JNTO',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'CONDITIONAL — Often rated better than Niseko, less crowded. Same schedule trade-off. Only if committing to destination ski content.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Mount Moiwa Ropeway',
@@ -1217,7 +1307,9 @@
                 mapsUrl: 'https://maps.google.com/?q=43.0317,141.3331',
                 readMoreUrl: 'https://www.japan.travel/en/spot/1855/',
                 readMoreSource: 'JNTO',
-                priority: 'High'
+                priority: 'High',
+                recommendation: "HIGH PRIORITY — Day 5 or 6 evening. Backup night view if Hakodate was weathered out, OR comparison content ('which view is better?'). Last up 9:30pm.",
+                recommendationType: 'recommended'
             },
             {
                 name: 'Jozankei Onsen',
@@ -1236,7 +1328,9 @@
                 mapsUrl: 'https://maps.google.com/?q=42.9697,141.1667',
                 readMoreUrl: 'https://www.japan.travel/en/spot/1934/',
                 readMoreSource: 'JNTO',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: 'LOW PRIORITY — Nice half-day escape with quirky kappa statues, but not essential. Only if Day 6 has dead time.',
+                recommendationType: 'conditional'
             },
             {
                 name: 'Historical Village of Hokkaido',
@@ -1255,7 +1349,9 @@
                 mapsUrl: 'https://maps.google.com/?q=43.0528,141.4889',
                 readMoreUrl: 'https://www.atlasobscura.com/places/historical-village-of-hokkaido-japan',
                 readMoreSource: 'Atlas Obscura',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'RECOMMENDED — Day 6 morning. 52 historic buildings + winter sleigh ride. Golden Kamuy anime connection. Closed Mondays (we\'re there Saturday).',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Soup Curry GARAKU',
@@ -1272,7 +1368,9 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.0567,141.3506',
-                priority: 'Medium'
+                priority: 'Medium',
+                recommendation: "CONDITIONAL — Tourist favorite, but 30-60min lines. Consider Ajanta instead for 'birthplace' story.",
+                recommendationType: 'conditional'
             },
             {
                 name: 'Ajanta Indo Curry',
@@ -1292,7 +1390,9 @@
                 mapsUrl: 'https://maps.google.com/?q=43.0853,141.3567',
                 readMoreUrl: 'https://culinarybackstreets.com/cities-category/tokyo/2023/hokkaido-soup-curry-2/',
                 readMoreSource: 'Culinary Backstreets',
-                priority: 'High'
+                priority: 'High',
+                recommendation: "HIGH PRIORITY — Day 5 afternoon. THE birthplace of soup curry (1971). Less touristy than GARAKU. 'Pilgrimage to where it was invented' story.",
+                recommendationType: 'recommended'
             },
             {
                 name: 'Sapporo Beer Garden',
@@ -1311,7 +1411,9 @@
                 mapsUrl: 'https://maps.google.com/?q=43.0708,141.3789',
                 readMoreUrl: 'https://www.japan.travel/en/spot/1922/',
                 readMoreSource: 'JNTO',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'HIGH PRIORITY — Day 5 lunch. Jingisukan (lamb BBQ) + beer experience. BOOK RESERVATION NOW.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'IWACHU Ironware Museum',
@@ -1331,7 +1433,9 @@
                 mapsUrl: 'https://maps.google.com/?q=39.6714,141.1536',
                 readMoreUrl: 'https://www.nationalgeographic.com/travel/article/japan-tohoku-traditional-crafts',
                 readMoreSource: 'National Geographic',
-                priority: 'High'
+                priority: 'High',
+                recommendation: 'HIGH PRIORITY — Core Day 1 craft content. Free admission. Try to visit on Friday for molten iron pouring. Contact for filming permission.',
+                recommendationType: 'recommended'
             },
             {
                 name: 'Shokudoen',
@@ -1351,7 +1455,9 @@
                 mapsUrl: 'https://maps.google.com/?q=39.7000,141.1550',
                 readMoreUrl: 'https://www.japantimes.co.jp/life/2021/01/16/food/morioka-noodles/',
                 readMoreSource: 'Japan Times',
-                priority: 'High'
+                priority: 'High',
+                recommendation: "HIGH PRIORITY — Day 1 food origin story (Korean immigrant narrative). Quick stop, low cost. Part of 'three noodles' challenge.",
+                recommendationType: 'recommended'
             },
             {
                 name: 'Pairon Honten',
@@ -1371,7 +1477,9 @@
                 mapsUrl: 'https://maps.google.com/?q=39.7025,141.1540',
                 readMoreUrl: 'https://www.japantimes.co.jp/life/2021/01/16/food/morioka-noodles/',
                 readMoreSource: 'Japan Times',
-                priority: 'High'
+                priority: 'High',
+                recommendation: "HIGH PRIORITY — Day 1 interactive content (Chitantan egg ritual on camera). Station branch is most convenient. Part of 'three noodles' challenge.",
+                recommendationType: 'recommended'
             }
         ];
 
@@ -1500,6 +1608,7 @@
                         </div>
                         <div class="popup-features">${loc.features}</div>
                         <div class="popup-notes"><strong>Production Notes:</strong> ${loc.notes}</div>
+                        ${loc.recommendation ? `<div class="popup-recommendation ${loc.recommendationType}"><strong>Recommendation:</strong> ${loc.recommendation}</div>` : ''}
                         ${loc.readMoreUrl ? `<div class="popup-links"><a href="${loc.readMoreUrl}" target="_blank" class="popup-link">📰 Read More: ${loc.readMoreSource} →</a></div>` : ''}
                         <div class="popup-buttons">
                             <a href="${loc.mapsUrl}" target="_blank" class="popup-button">🗺️ Google Maps</a>
