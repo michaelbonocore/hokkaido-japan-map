@@ -212,6 +212,17 @@
         .popup-link:hover {
             text-decoration: underline;
         }
+        .popup-links {
+            margin-top: 10px;
+        }
+        .popup-links .popup-link {
+            margin-top: 0;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .popup-links .popup-link:last-child {
+            margin-bottom: 0;
+        }
         .region-popup .popup-body {
             padding: 15px;
         }
@@ -596,6 +607,8 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=38.1639,140.3969',
+                readMoreUrl: 'https://www.cnn.com/travel/article/zao-onsen-japan',
+                readMoreSource: 'CNN Travel',
                 priority: 'Medium'
             },
             {
@@ -647,6 +660,8 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=39.7016,141.1345',
+                readMoreUrl: 'https://www.nytimes.com/interactive/2023/travel/52-places-travel-2023.html',
+                readMoreSource: 'NY Times',
                 priority: 'Medium'
             },
             {
@@ -664,6 +679,8 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=39.7039,141.1367',
+                readMoreUrl: 'https://www.cnn.com/travel/article/wanko-soba-challenge-japan',
+                readMoreSource: 'CNN Travel',
                 priority: 'High'
             },
             {
@@ -715,6 +732,8 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=41.7581,140.7022',
+                readMoreUrl: 'https://www.japan.travel/en/spot/1922/',
+                readMoreSource: 'JNTO',
                 priority: 'High'
             },
             {
@@ -732,6 +751,8 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=41.7731,140.7281',
+                readMoreUrl: 'https://www.lonelyplanet.com/japan/hokkaido/hakodate/attractions/hakodate-morning-market',
+                readMoreSource: 'Lonely Planet',
                 priority: 'High'
             },
             {
@@ -783,6 +804,8 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=41.7964,140.7569',
+                readMoreUrl: 'https://www.lonelyplanet.com/japan/hokkaido/hakodate/attractions/hakodate-yama',
+                readMoreSource: 'Lonely Planet',
                 priority: 'Medium'
             },
             {
@@ -936,6 +959,8 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.1972,141.0028',
+                readMoreUrl: 'https://www.japan-guide.com/e/e6701.html',
+                readMoreSource: 'Japan Guide',
                 priority: 'Medium'
             },
             {
@@ -1038,6 +1063,8 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.0697,141.3653',
+                readMoreUrl: 'https://www.japan.travel/en/spot/1922/',
+                readMoreSource: 'JNTO',
                 priority: 'Medium'
             },
             {
@@ -1209,6 +1236,8 @@
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=43.0708,141.3789',
+                readMoreUrl: 'https://www.japan.travel/en/spot/1922/',
+                readMoreSource: 'JNTO',
                 priority: 'High'
             },
             {
@@ -1392,7 +1421,10 @@
                         </div>
                         <div class="popup-features">${loc.features}</div>
                         <div class="popup-notes"><strong>Production Notes:</strong> ${loc.notes}</div>
-                        <a href="${loc.mapsUrl}" target="_blank" class="popup-link">Open in Google Maps →</a>
+                        <div class="popup-links">
+                            ${loc.readMoreUrl ? `<a href="${loc.readMoreUrl}" target="_blank" class="popup-link">📰 Read More: ${loc.readMoreSource} →</a>` : ''}
+                            <a href="${loc.mapsUrl}" target="_blank" class="popup-link">🗺️ Open in Google Maps →</a>
+                        </div>
                     </div>
                 </div>
             `;
