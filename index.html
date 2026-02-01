@@ -472,6 +472,138 @@
                 max-height: 250px;
             }
         }
+
+        /* ===== DEV TOOLS: GPS Capture & Edit Mode ===== */
+        .coords-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            z-index: 2000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none;
+        }
+        .coords-toast.show {
+            display: block;
+            animation: fadeInOut 2.5s ease-in-out;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+        }
+        .edit-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+        }
+        .edit-mode-toggle label {
+            font-size: 0.85rem;
+            color: #333;
+            cursor: pointer;
+        }
+        .edit-mode-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+        .edit-mode-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .edit-mode-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 24px;
+        }
+        .edit-mode-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        .edit-mode-switch input:checked + .edit-mode-slider {
+            background-color: #4A90D9;
+        }
+        .edit-mode-switch input:checked + .edit-mode-slider:before {
+            transform: translateX(20px);
+        }
+        .popup-edit-btn {
+            display: none;
+            background: #4A90D9;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        .popup-edit-btn:hover {
+            background: #357ABD;
+        }
+        .popup-edit-btn.cancel {
+            background: #6c757d;
+            margin-left: 8px;
+        }
+        .popup-edit-btn.cancel:hover {
+            background: #545b62;
+        }
+        body.edit-mode-on .popup-edit-btn {
+            display: inline-block;
+        }
+        .popup-body.editing {
+            background: #fffef0;
+            border: 2px dashed #4A90D9;
+            border-radius: 0 0 8px 8px;
+        }
+        .popup-body.editing .editable-field {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 4px 6px;
+            border-radius: 3px;
+            width: 100%;
+            font-family: inherit;
+            font-size: inherit;
+            margin: 2px 0;
+        }
+        .popup-body.editing textarea.editable-field {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .popup-body.editing .popup-meta-item span {
+            display: none;
+        }
+        .popup-body.editing .popup-features,
+        .popup-body.editing .popup-notes-text,
+        .popup-body.editing .popup-recommendation-text {
+            display: none;
+        }
+        .edit-actions {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -511,6 +643,17 @@
             <div class="special-item" style="font-size: 11px; line-height: 1.4;">Uber works in Japan as a taxi-hailing app (not rideshare). Download the Uber app before your trip. Backup: GO app has wider coverage if Uber shows no cars.</div>
         </div>
         <div class="sidebar-section">
+            <h3>🛠️ Dev Tools</h3>
+            <div class="edit-mode-toggle">
+                <label class="edit-mode-switch">
+                    <input type="checkbox" id="editModeToggle" onchange="toggleEditMode()">
+                    <span class="edit-mode-slider"></span>
+                </label>
+                <label for="editModeToggle">Edit Mode</label>
+            </div>
+            <div class="special-item" style="font-size: 10px; color: #999;">Right-click map to copy GPS coords</div>
+        </div>
+        <div class="sidebar-section">
             <div class="section-header collapsed" onclick="toggleLocationsSection()">
                 <h3>Locations</h3>
                 <span class="section-toggle">▼</span>
@@ -526,6 +669,7 @@
     </div>
 
     <div id="map"></div>
+    <div class="coords-toast" id="coordsToast"></div>
 
     <script>
         // Category definitions
@@ -1639,7 +1783,7 @@
         }
 
         // Create location popup content
-        function createPopupContent(loc) {
+        function createPopupContent(loc, locIndex) {
             const catColor = categories[loc.category]?.color || '#666';
             const priorityClass = `priority-${loc.priority.toLowerCase()}`;
 
@@ -1650,7 +1794,7 @@
             if (loc.livingCraft) badges += '<span class="popup-badge">🔨 Living Craft</span>';
 
             return `
-                <div class="location-popup ${priorityClass}">
+                <div class="location-popup ${priorityClass}" data-loc-index="${locIndex}">
                     <div class="popup-header" style="background: ${catColor}">
                         <h3>${loc.name}</h3>
                         <div class="popup-badges">
@@ -1659,32 +1803,43 @@
                             ${badges}
                         </div>
                     </div>
-                    <div class="popup-body">
+                    <div class="popup-body" id="popup-body-${locIndex}">
                         <div class="popup-meta">
-                            <div class="popup-meta-item">
+                            <div class="popup-meta-item" data-field="dates">
                                 <label>Dates</label>
                                 <span>${loc.dates}</span>
+                                <input type="text" class="editable-field" value="${loc.dates}" style="display:none;">
                             </div>
-                            <div class="popup-meta-item">
+                            <div class="popup-meta-item" data-field="bestTime">
                                 <label>Best Time</label>
                                 <span>${loc.bestTime}</span>
+                                <input type="text" class="editable-field" value="${loc.bestTime}" style="display:none;">
                             </div>
-                            <div class="popup-meta-item">
+                            <div class="popup-meta-item" data-field="admission">
                                 <label>Admission</label>
                                 <span>${loc.admission}</span>
+                                <input type="text" class="editable-field" value="${loc.admission}" style="display:none;">
                             </div>
-                            <div class="popup-meta-item">
+                            <div class="popup-meta-item" data-field="permits">
                                 <label>Permits</label>
                                 <span>${loc.permits}</span>
+                                <input type="text" class="editable-field" value="${loc.permits}" style="display:none;">
                             </div>
                         </div>
                         <div class="popup-features">${loc.features}</div>
-                        <div class="popup-notes"><strong>Production Notes:</strong> ${loc.notes}</div>
-                        ${loc.recommendation ? `<div class="popup-recommendation ${loc.recommendationType}"><strong>Recommendation:</strong> ${loc.recommendation}</div>` : ''}
+                        <textarea class="editable-field" data-field="features" style="display:none;">${loc.features}</textarea>
+                        <div class="popup-notes"><strong>Production Notes:</strong> <span class="popup-notes-text">${loc.notes}</span></div>
+                        <textarea class="editable-field" data-field="notes" style="display:none;">${loc.notes}</textarea>
+                        ${loc.recommendation ? `<div class="popup-recommendation ${loc.recommendationType}"><strong>Recommendation:</strong> <span class="popup-recommendation-text">${loc.recommendation}</span></div><textarea class="editable-field" data-field="recommendation" style="display:none;">${loc.recommendation}</textarea>` : ''}
                         ${loc.readMoreUrl ? `<div class="popup-links"><a href="${loc.readMoreUrl}" target="_blank" class="popup-link">📰 Read More: ${loc.readMoreSource} →</a></div>` : ''}
                         <div class="popup-buttons">
                             <a href="${loc.mapsUrl}" target="_blank" class="popup-button">🗺️ Google Maps</a>
                             <a href="https://www.google.com/search?q=${encodeURIComponent(loc.name + ' ' + loc.region + ' Japan')}&udm=2" target="_blank" class="popup-button secondary">🖼️ Images</a>
+                        </div>
+                        <div class="edit-actions">
+                            <button class="popup-edit-btn" onclick="enterEditMode(${locIndex})">✏️ Edit</button>
+                            <button class="popup-edit-btn" onclick="saveEdits(${locIndex})" style="display:none;" data-save="${locIndex}">💾 Save</button>
+                            <button class="popup-edit-btn cancel" onclick="cancelEdits(${locIndex})" style="display:none;" data-cancel="${locIndex}">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -1773,7 +1928,7 @@
             const marker = L.marker(loc.coords, {
                 icon: createMarkerIcon(color, loc.priority)
             });
-            marker.bindPopup(createPopupContent(loc), { maxWidth: 350 });
+            marker.bindPopup(createPopupContent(loc, index), { maxWidth: 350 });
 
             // Store marker reference with index for unique identification
             locationMarkers[index] = { marker, location: loc };
@@ -1987,6 +2142,169 @@
         if (allCoords.length > 0) {
             map.fitBounds(allCoords, { padding: [50, 50] });
         }
+
+        // ===== DEV TOOLS: Edit Mode & GPS Capture =====
+
+        // Toggle Edit Mode
+        function toggleEditMode() {
+            const isOn = document.getElementById('editModeToggle').checked;
+            document.body.classList.toggle('edit-mode-on', isOn);
+        }
+
+        // Enter edit mode for a specific location popup
+        function enterEditMode(locIndex) {
+            const popupBody = document.getElementById(`popup-body-${locIndex}`);
+            if (!popupBody) return;
+
+            popupBody.classList.add('editing');
+
+            // Show input fields, hide display spans
+            popupBody.querySelectorAll('.popup-meta-item').forEach(item => {
+                const span = item.querySelector('span');
+                const input = item.querySelector('input');
+                if (span && input) {
+                    span.style.display = 'none';
+                    input.style.display = 'block';
+                }
+            });
+
+            // Show textareas for features, notes, recommendation
+            popupBody.querySelectorAll('textarea.editable-field').forEach(textarea => {
+                textarea.style.display = 'block';
+            });
+
+            // Hide the display divs for features, notes, recommendation
+            const features = popupBody.querySelector('.popup-features');
+            const notes = popupBody.querySelector('.popup-notes');
+            const recommendation = popupBody.querySelector('.popup-recommendation');
+            if (features) features.style.display = 'none';
+            if (notes) notes.style.display = 'none';
+            if (recommendation) recommendation.style.display = 'none';
+
+            // Toggle buttons
+            popupBody.querySelector('.popup-edit-btn[onclick^="enterEditMode"]').style.display = 'none';
+            popupBody.querySelector(`[data-save="${locIndex}"]`).style.display = 'inline-block';
+            popupBody.querySelector(`[data-cancel="${locIndex}"]`).style.display = 'inline-block';
+        }
+
+        // Save edits and update display
+        function saveEdits(locIndex) {
+            const popupBody = document.getElementById(`popup-body-${locIndex}`);
+            if (!popupBody) return;
+
+            // Update meta item spans from inputs
+            popupBody.querySelectorAll('.popup-meta-item').forEach(item => {
+                const span = item.querySelector('span');
+                const input = item.querySelector('input');
+                if (span && input) {
+                    span.textContent = input.value;
+                    span.style.display = 'inline';
+                    input.style.display = 'none';
+                }
+            });
+
+            // Update features
+            const featuresTextarea = popupBody.querySelector('textarea[data-field="features"]');
+            const featuresDiv = popupBody.querySelector('.popup-features');
+            if (featuresTextarea && featuresDiv) {
+                featuresDiv.innerHTML = featuresTextarea.value;
+                featuresDiv.style.display = 'block';
+                featuresTextarea.style.display = 'none';
+            }
+
+            // Update notes
+            const notesTextarea = popupBody.querySelector('textarea[data-field="notes"]');
+            const notesSpan = popupBody.querySelector('.popup-notes-text');
+            const notesDiv = popupBody.querySelector('.popup-notes');
+            if (notesTextarea && notesSpan && notesDiv) {
+                notesSpan.textContent = notesTextarea.value;
+                notesDiv.style.display = 'block';
+                notesTextarea.style.display = 'none';
+            }
+
+            // Update recommendation
+            const recTextarea = popupBody.querySelector('textarea[data-field="recommendation"]');
+            const recSpan = popupBody.querySelector('.popup-recommendation-text');
+            const recDiv = popupBody.querySelector('.popup-recommendation');
+            if (recTextarea && recSpan && recDiv) {
+                recSpan.textContent = recTextarea.value;
+                recDiv.style.display = 'block';
+                recTextarea.style.display = 'none';
+            }
+
+            // Exit edit mode
+            popupBody.classList.remove('editing');
+            popupBody.querySelector('.popup-edit-btn[onclick^="enterEditMode"]').style.display = 'inline-block';
+            popupBody.querySelector(`[data-save="${locIndex}"]`).style.display = 'none';
+            popupBody.querySelector(`[data-cancel="${locIndex}"]`).style.display = 'none';
+
+            // Log the edited values to console for copy/paste
+            console.log(`=== Location ${locIndex} Edits ===`);
+            popupBody.querySelectorAll('.popup-meta-item').forEach(item => {
+                const field = item.dataset.field;
+                const value = item.querySelector('span').textContent;
+                console.log(`${field}: "${value}"`);
+            });
+            if (featuresDiv) console.log(`features: "${featuresDiv.innerHTML}"`);
+            if (notesSpan) console.log(`notes: "${notesSpan.textContent}"`);
+            if (recSpan) console.log(`recommendation: "${recSpan.textContent}"`);
+        }
+
+        // Cancel edits and restore original values
+        function cancelEdits(locIndex) {
+            const popupBody = document.getElementById(`popup-body-${locIndex}`);
+            if (!popupBody) return;
+
+            // Restore meta item spans, reset inputs to match spans
+            popupBody.querySelectorAll('.popup-meta-item').forEach(item => {
+                const span = item.querySelector('span');
+                const input = item.querySelector('input');
+                if (span && input) {
+                    input.value = span.textContent; // Reset input to original
+                    span.style.display = 'inline';
+                    input.style.display = 'none';
+                }
+            });
+
+            // Hide textareas, show display divs
+            popupBody.querySelectorAll('textarea.editable-field').forEach(textarea => {
+                textarea.style.display = 'none';
+            });
+
+            const features = popupBody.querySelector('.popup-features');
+            const notes = popupBody.querySelector('.popup-notes');
+            const recommendation = popupBody.querySelector('.popup-recommendation');
+            if (features) features.style.display = 'block';
+            if (notes) notes.style.display = 'block';
+            if (recommendation) recommendation.style.display = 'block';
+
+            // Exit edit mode
+            popupBody.classList.remove('editing');
+            popupBody.querySelector('.popup-edit-btn[onclick^="enterEditMode"]').style.display = 'inline-block';
+            popupBody.querySelector(`[data-save="${locIndex}"]`).style.display = 'none';
+            popupBody.querySelector(`[data-cancel="${locIndex}"]`).style.display = 'none';
+        }
+
+        // Right-click GPS capture
+        map.on('contextmenu', function(e) {
+            const lat = e.latlng.lat.toFixed(6);
+            const lng = e.latlng.lng.toFixed(6);
+            const coordsText = `[${lat}, ${lng}]`;
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(coordsText).then(() => {
+                // Show toast
+                const toast = document.getElementById('coordsToast');
+                toast.textContent = `📍 Copied: ${coordsText}`;
+                toast.classList.add('show');
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2500);
+            }).catch(err => {
+                console.error('Failed to copy coords:', err);
+            });
+        });
     </script>
 </body>
 </html>
