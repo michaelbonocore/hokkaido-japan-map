@@ -2408,17 +2408,24 @@
             // Update coordinates and marker position
             const coordsInput = popupBody.querySelector('.coords-input');
             const mapsUrlInput = popupBody.querySelector('.maps-url-input');
+            let markerMoved = false;
+            let newMarkerPos = null;
             if (coordsInput) {
                 const coordsMatch = coordsInput.value.match(/\[?\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\]?/);
                 if (coordsMatch) {
                     const newLat = parseFloat(coordsMatch[1]);
                     const newLng = parseFloat(coordsMatch[2]);
 
-                    // Update marker position
+                    // Update marker position on map
                     const markerData = locationMarkers[locIndex];
                     if (markerData && markerData.marker) {
-                        markerData.marker.setLatLng([newLat, newLng]);
-                        markerData.location.coords = [newLat, newLng];
+                        const oldPos = markerData.marker.getLatLng();
+                        if (oldPos.lat !== newLat || oldPos.lng !== newLng) {
+                            markerData.marker.setLatLng([newLat, newLng]);
+                            markerData.location.coords = [newLat, newLng];
+                            markerMoved = true;
+                            newMarkerPos = [newLat, newLng];
+                        }
                     }
 
                     // Update the stored original value for cancel
@@ -2477,6 +2484,18 @@
             // Log the edited values to console for copy/paste
             console.log(`=== Location ${locIndex} Edits (stored in session) ===`);
             console.log(sessionEdits[locIndex]);
+
+            // If marker moved, pan map to new position and reopen popup
+            if (markerMoved && newMarkerPos) {
+                const markerData = locationMarkers[locIndex];
+                markerData.marker.closePopup();
+                setTimeout(() => {
+                    map.panTo(newMarkerPos, { animate: true });
+                    setTimeout(() => {
+                        markerData.marker.openPopup();
+                    }, 300);
+                }, 100);
+            }
         }
 
         // Cancel edits and restore original values
@@ -2565,7 +2584,7 @@
         // Export changes function
         function exportChanges() {
             const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            let markdown = `**CLAUDE CODE INSTRUCTION: Update the Hokkaido interactive map (index.html) with the following changes. For each location listed, find the corresponding entry in the \`locations\` array and update only the fields shown.**\n\n## MAP EDITS - ${today}\n\n`;
+            let markdown = `**CLAUDE CODE INSTRUCTION: Update the Hokkaido interactive map (index.html) with the following changes. For each location listed, find the corresponding entry in the \`locations\` array and update the coords (lat/lng) and any other fields shown.**\n\n## MAP EDITS - ${today}\n\n`;
             let hasChanges = false;
 
             const fieldLabels = {
@@ -2608,9 +2627,9 @@
                 if (edits.recommendation !== (loc.recommendation || '')) {
                     changes.push({ field: 'recommendation', label: 'Recommendation', value: edits.recommendation });
                 }
-                // Compare coords as arrays
-                const origCoords = `[${loc.coords[0]}, ${loc.coords[1]}]`;
-                const editCoords = `[${edits.coords[0]}, ${edits.coords[1]}]`;
+                // Compare coords as arrays - export as "lat, lng" format for code updates
+                const origCoords = `${loc.coords[0]}, ${loc.coords[1]}`;
+                const editCoords = `${edits.coords[0]}, ${edits.coords[1]}`;
                 if (origCoords !== editCoords) {
                     changes.push({ field: 'coords', label: 'Coordinates', value: editCoords });
                 }
