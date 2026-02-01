@@ -18,6 +18,13 @@
         #map {
             width: 100%;
             height: 100vh;
+            cursor: crosshair;
+        }
+        .leaflet-container {
+            cursor: crosshair;
+        }
+        .leaflet-marker-icon, .leaflet-popup {
+            cursor: pointer;
         }
         .header {
             position: absolute;
@@ -1832,8 +1839,18 @@
                         <textarea class="editable-field" data-field="notes" style="display:none;">${loc.notes}</textarea>
                         ${loc.recommendation ? `<div class="popup-recommendation ${loc.recommendationType}"><strong>Recommendation:</strong> <span class="popup-recommendation-text">${loc.recommendation}</span></div><textarea class="editable-field" data-field="recommendation" style="display:none;">${loc.recommendation}</textarea>` : ''}
                         ${loc.readMoreUrl ? `<div class="popup-links"><a href="${loc.readMoreUrl}" target="_blank" class="popup-link">📰 Read More: ${loc.readMoreSource} →</a></div>` : ''}
+                        <div class="popup-meta edit-only-fields" style="display:none; margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                            <div class="popup-meta-item" data-field="coords">
+                                <label>📍 Coordinates</label>
+                                <input type="text" class="editable-field coords-input" value="[${loc.coords[0]}, ${loc.coords[1]}]" data-original="[${loc.coords[0]}, ${loc.coords[1]}]" oninput="updateMapsUrlFromCoords(this, ${locIndex})">
+                            </div>
+                            <div class="popup-meta-item" data-field="mapsUrl">
+                                <label>🗺️ Maps URL</label>
+                                <input type="text" class="editable-field maps-url-input" value="${loc.mapsUrl}" data-original="${loc.mapsUrl}" style="font-size: 10px;">
+                            </div>
+                        </div>
                         <div class="popup-buttons">
-                            <a href="${loc.mapsUrl}" target="_blank" class="popup-button">🗺️ Google Maps</a>
+                            <a href="${loc.mapsUrl}" target="_blank" class="popup-button maps-link" data-loc-index="${locIndex}">🗺️ Google Maps</a>
                             <a href="https://www.google.com/search?q=${encodeURIComponent(loc.name + ' ' + loc.region + ' Japan')}&udm=2" target="_blank" class="popup-button secondary">🖼️ Images</a>
                         </div>
                         <div class="edit-actions">
@@ -2181,6 +2198,10 @@
             if (notes) notes.style.display = 'none';
             if (recommendation) recommendation.style.display = 'none';
 
+            // Show edit-only fields (coordinates, maps URL)
+            const editOnlyFields = popupBody.querySelector('.edit-only-fields');
+            if (editOnlyFields) editOnlyFields.style.display = 'block';
+
             // Toggle buttons
             popupBody.querySelector('.popup-edit-btn[onclick^="enterEditMode"]').style.display = 'none';
             popupBody.querySelector(`[data-save="${locIndex}"]`).style.display = 'inline-block';
@@ -2232,6 +2253,40 @@
                 recTextarea.style.display = 'none';
             }
 
+            // Update coordinates and marker position
+            const coordsInput = popupBody.querySelector('.coords-input');
+            const mapsUrlInput = popupBody.querySelector('.maps-url-input');
+            if (coordsInput) {
+                const coordsMatch = coordsInput.value.match(/\[?\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\]?/);
+                if (coordsMatch) {
+                    const newLat = parseFloat(coordsMatch[1]);
+                    const newLng = parseFloat(coordsMatch[2]);
+
+                    // Update marker position
+                    const markerData = locationMarkers[locIndex];
+                    if (markerData && markerData.marker) {
+                        markerData.marker.setLatLng([newLat, newLng]);
+                        markerData.location.coords = [newLat, newLng];
+                    }
+
+                    // Update the stored original value for cancel
+                    coordsInput.dataset.original = `[${newLat}, ${newLng}]`;
+                }
+            }
+
+            // Update Google Maps link in popup
+            if (mapsUrlInput) {
+                const mapsLink = popupBody.querySelector('.maps-link');
+                if (mapsLink) {
+                    mapsLink.href = mapsUrlInput.value;
+                }
+                mapsUrlInput.dataset.original = mapsUrlInput.value;
+            }
+
+            // Hide edit-only fields
+            const editOnlyFields = popupBody.querySelector('.edit-only-fields');
+            if (editOnlyFields) editOnlyFields.style.display = 'none';
+
             // Exit edit mode
             popupBody.classList.remove('editing');
             popupBody.querySelector('.popup-edit-btn[onclick^="enterEditMode"]').style.display = 'inline-block';
@@ -2248,6 +2303,8 @@
             if (featuresDiv) console.log(`features: "${featuresDiv.innerHTML}"`);
             if (notesSpan) console.log(`notes: "${notesSpan.textContent}"`);
             if (recSpan) console.log(`recommendation: "${recSpan.textContent}"`);
+            if (coordsInput) console.log(`coords: ${coordsInput.value}`);
+            if (mapsUrlInput) console.log(`mapsUrl: "${mapsUrlInput.value}"`);
         }
 
         // Cancel edits and restore original values
@@ -2278,11 +2335,34 @@
             if (notes) notes.style.display = 'block';
             if (recommendation) recommendation.style.display = 'block';
 
+            // Restore edit-only fields to original values and hide
+            const coordsInput = popupBody.querySelector('.coords-input');
+            const mapsUrlInput = popupBody.querySelector('.maps-url-input');
+            if (coordsInput) coordsInput.value = coordsInput.dataset.original;
+            if (mapsUrlInput) mapsUrlInput.value = mapsUrlInput.dataset.original;
+
+            const editOnlyFields = popupBody.querySelector('.edit-only-fields');
+            if (editOnlyFields) editOnlyFields.style.display = 'none';
+
             // Exit edit mode
             popupBody.classList.remove('editing');
             popupBody.querySelector('.popup-edit-btn[onclick^="enterEditMode"]').style.display = 'inline-block';
             popupBody.querySelector(`[data-save="${locIndex}"]`).style.display = 'none';
             popupBody.querySelector(`[data-cancel="${locIndex}"]`).style.display = 'none';
+        }
+
+        // Auto-update Maps URL when coordinates change
+        function updateMapsUrlFromCoords(coordsInput, locIndex) {
+            const coordsMatch = coordsInput.value.match(/\[?\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\]?/);
+            if (coordsMatch) {
+                const lat = parseFloat(coordsMatch[1]);
+                const lng = parseFloat(coordsMatch[2]);
+                const popupBody = document.getElementById(`popup-body-${locIndex}`);
+                const mapsUrlInput = popupBody?.querySelector('.maps-url-input');
+                if (mapsUrlInput) {
+                    mapsUrlInput.value = `https://maps.google.com/?q=${lat},${lng}`;
+                }
+            }
         }
 
         // Right-click GPS capture
