@@ -611,6 +611,125 @@
             padding-top: 10px;
             border-top: 1px solid #ddd;
         }
+        /* Export Modal */
+        .export-btn {
+            display: none;
+            width: 100%;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+        .export-btn:hover {
+            background: #218838;
+        }
+        body.edit-mode-on .export-btn {
+            display: block;
+        }
+        .export-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        .export-modal-overlay.show {
+            display: flex;
+        }
+        .export-modal {
+            background: #fff;
+            border-radius: 8px;
+            max-width: 700px;
+            max-height: 80vh;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .export-modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .export-modal-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .export-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+        .export-modal-close:hover {
+            color: #333;
+        }
+        .export-modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .export-modal-body pre {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .export-modal-footer {
+            padding: 12px 20px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .export-modal-footer button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .export-copy-btn {
+            background: #4A90D9;
+            color: #fff;
+            border: none;
+        }
+        .export-copy-btn:hover {
+            background: #357ABD;
+        }
+        .export-close-btn {
+            background: #fff;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        .export-close-btn:hover {
+            background: #f8f9fa;
+        }
+        .no-changes-msg {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -659,6 +778,7 @@
                 <label for="editModeToggle">Edit Mode</label>
             </div>
             <div class="special-item" style="font-size: 10px; color: #999;">Right-click map to copy GPS coords</div>
+            <button class="export-btn" onclick="exportChanges()">📋 Export Changes</button>
         </div>
         <div class="sidebar-section">
             <div class="section-header collapsed" onclick="toggleLocationsSection()">
@@ -677,6 +797,23 @@
 
     <div id="map"></div>
     <div class="coords-toast" id="coordsToast"></div>
+
+    <!-- Export Changes Modal -->
+    <div class="export-modal-overlay" id="exportModal">
+        <div class="export-modal">
+            <div class="export-modal-header">
+                <h3>📋 Export Changes</h3>
+                <button class="export-modal-close" onclick="closeExportModal()">&times;</button>
+            </div>
+            <div class="export-modal-body">
+                <pre id="exportContent"></pre>
+            </div>
+            <div class="export-modal-footer">
+                <button class="export-close-btn" onclick="closeExportModal()">Close</button>
+                <button class="export-copy-btn" onclick="copyExportToClipboard()">📋 Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Category definitions
@@ -2173,6 +2310,9 @@
             const popupBody = document.getElementById(`popup-body-${locIndex}`);
             if (!popupBody) return;
 
+            // Capture original values for export comparison
+            captureOriginalValues(locIndex);
+
             popupBody.classList.add('editing');
 
             // Show input fields, hide display spans
@@ -2364,6 +2504,155 @@
                 }
             }
         }
+
+        // ===== EXPORT CHANGES FEATURE =====
+        // Store original values for each location when first edited
+        const sessionOriginals = {};
+
+        // Capture original values when entering edit mode
+        function captureOriginalValues(locIndex) {
+            if (sessionOriginals[locIndex]) return; // Already captured
+
+            const loc = locations[locIndex];
+            sessionOriginals[locIndex] = {
+                name: loc.name,
+                dates: loc.dates,
+                bestTime: loc.bestTime,
+                admission: loc.admission,
+                permits: loc.permits,
+                features: loc.features,
+                notes: loc.notes,
+                recommendation: loc.recommendation || '',
+                coords: `[${loc.coords[0]}, ${loc.coords[1]}]`,
+                mapsUrl: loc.mapsUrl
+            };
+        }
+
+        // Get current values from the popup or stored location
+        function getCurrentValues(locIndex) {
+            const loc = locations[locIndex];
+            const markerData = locationMarkers[locIndex];
+            const currentCoords = markerData ? markerData.location.coords : loc.coords;
+
+            // Try to get values from open popup first, fall back to location data
+            const popupBody = document.getElementById(`popup-body-${locIndex}`);
+            if (popupBody) {
+                const getMetaValue = (field) => {
+                    const item = popupBody.querySelector(`[data-field="${field}"]`);
+                    if (item) {
+                        const span = item.querySelector('span');
+                        return span ? span.textContent : '';
+                    }
+                    return '';
+                };
+
+                return {
+                    name: loc.name,
+                    dates: getMetaValue('dates') || loc.dates,
+                    bestTime: getMetaValue('bestTime') || loc.bestTime,
+                    admission: getMetaValue('admission') || loc.admission,
+                    permits: getMetaValue('permits') || loc.permits,
+                    features: popupBody.querySelector('.popup-features')?.innerHTML || loc.features,
+                    notes: popupBody.querySelector('.popup-notes-text')?.textContent || loc.notes,
+                    recommendation: popupBody.querySelector('.popup-recommendation-text')?.textContent || loc.recommendation || '',
+                    coords: `[${currentCoords[0]}, ${currentCoords[1]}]`,
+                    mapsUrl: popupBody.querySelector('.maps-link')?.href || loc.mapsUrl
+                };
+            }
+
+            return {
+                name: loc.name,
+                dates: loc.dates,
+                bestTime: loc.bestTime,
+                admission: loc.admission,
+                permits: loc.permits,
+                features: loc.features,
+                notes: loc.notes,
+                recommendation: loc.recommendation || '',
+                coords: `[${currentCoords[0]}, ${currentCoords[1]}]`,
+                mapsUrl: loc.mapsUrl
+            };
+        }
+
+        // Export changes function
+        function exportChanges() {
+            const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let markdown = `## MAP EDITS - ${today}\n\n`;
+            let hasChanges = false;
+
+            const fieldLabels = {
+                dates: 'Dates',
+                bestTime: 'Best Time',
+                admission: 'Admission',
+                permits: 'Permits',
+                features: 'Features',
+                notes: 'Production Notes',
+                recommendation: 'Recommendation',
+                coords: 'Coordinates',
+                mapsUrl: 'Google Maps URL'
+            };
+
+            // Check each location that was edited
+            Object.keys(sessionOriginals).sort((a, b) => parseInt(a) - parseInt(b)).forEach(locIndex => {
+                const original = sessionOriginals[locIndex];
+                const current = getCurrentValues(parseInt(locIndex));
+                const changes = [];
+
+                // Compare each field
+                Object.keys(fieldLabels).forEach(field => {
+                    const origVal = (original[field] || '').trim();
+                    const currVal = (current[field] || '').trim();
+
+                    if (origVal !== currVal) {
+                        changes.push({ field, label: fieldLabels[field], value: currVal });
+                    }
+                });
+
+                if (changes.length > 0) {
+                    hasChanges = true;
+                    markdown += `### Location #${parseInt(locIndex) + 1}: ${original.name}\n`;
+                    changes.forEach(change => {
+                        // For long text fields, use a different format
+                        if (['features', 'notes', 'recommendation'].includes(change.field) && change.value.length > 80) {
+                            markdown += `- **${change.label}:**\n  ${change.value}\n`;
+                        } else {
+                            markdown += `- **${change.label}:** ${change.value}\n`;
+                        }
+                    });
+                    markdown += '\n';
+                }
+            });
+
+            const exportContent = document.getElementById('exportContent');
+            if (hasChanges) {
+                exportContent.textContent = markdown.trim();
+            } else {
+                exportContent.innerHTML = '<span class="no-changes-msg">No changes detected. Edit some location cards first.</span>';
+            }
+
+            document.getElementById('exportModal').classList.add('show');
+        }
+
+        function closeExportModal() {
+            document.getElementById('exportModal').classList.remove('show');
+        }
+
+        function copyExportToClipboard() {
+            const content = document.getElementById('exportContent').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.querySelector('.export-copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Close modal on overlay click
+        document.getElementById('exportModal').addEventListener('click', function(e) {
+            if (e.target === this) closeExportModal();
+        });
 
         // Right-click GPS capture
         map.on('contextmenu', function(e) {
