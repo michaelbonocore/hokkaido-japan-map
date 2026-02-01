@@ -2031,6 +2031,8 @@
             const recommendation = edits.recommendation !== undefined ? edits.recommendation : (loc.recommendation || '');
             let coords = edits.coords !== undefined ? edits.coords : loc.coords;
             const mapsUrl = edits.mapsUrl !== undefined ? edits.mapsUrl : loc.mapsUrl;
+            const readMoreSource = edits.readMoreSource !== undefined ? edits.readMoreSource : (loc.readMoreSource || '');
+            const readMoreUrl = edits.readMoreUrl !== undefined ? edits.readMoreUrl : (loc.readMoreUrl || '');
             // Extract full precision coords from mapsUrl for display
             const urlCoordsMatch = mapsUrl.match(/[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/);
             if (urlCoordsMatch) {
@@ -2109,7 +2111,7 @@
                             <label style="font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; display: block; margin-top: 8px;">Recommendation Details:</label>
                             <textarea class="recommendation-text-input" data-field="recommendationText">${recommendationText}</textarea>
                         </div>` : ''}
-                        ${loc.readMoreUrl ? `<div class="popup-links"><a href="${loc.readMoreUrl}" target="_blank" class="popup-link">📰 Read More: ${loc.readMoreSource} →</a></div>` : ''}
+                        ${readMoreUrl ? `<div class="popup-links"><a href="${readMoreUrl}" target="_blank" class="popup-link">📰 Read More: ${readMoreSource || 'Link'} →</a></div>` : (readMoreSource ? `<div class="popup-links"><span class="popup-link">📰 Read More: ${readMoreSource}</span></div>` : '')}
                         <div class="popup-meta edit-only-fields" style="display:none; margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
                             <div class="popup-meta-item" data-field="coords">
                                 <label>📍 Coordinates</label>
@@ -2118,6 +2120,14 @@
                             <div class="popup-meta-item" data-field="mapsUrl">
                                 <label>🗺️ Maps URL</label>
                                 <input type="text" class="editable-field maps-url-input" value="${mapsUrl}" data-original="${loc.mapsUrl}" style="font-size: 10px;">
+                            </div>
+                            <div class="popup-meta-item" data-field="readMoreSource">
+                                <label>📰 Read More Source</label>
+                                <input type="text" class="editable-field read-more-source-input" value="${readMoreSource}" data-original="${loc.readMoreSource || ''}" placeholder="e.g., JNTO, Japan Guide">
+                            </div>
+                            <div class="popup-meta-item" data-field="readMoreUrl">
+                                <label>🔗 Read More URL</label>
+                                <input type="text" class="editable-field read-more-url-input" value="${readMoreUrl}" data-original="${loc.readMoreUrl || ''}" style="font-size: 10px;" placeholder="https://...">
                             </div>
                         </div>
                         <div class="popup-buttons">
@@ -2585,6 +2595,47 @@
                 mapsUrlInput.dataset.original = mapsUrlInput.value;
             }
 
+            // Update Read More link in popup
+            const readMoreSourceInput = popupBody.querySelector('.read-more-source-input');
+            const readMoreUrlInput = popupBody.querySelector('.read-more-url-input');
+            const popupLinksDiv = popupBody.querySelector('.popup-links');
+
+            if (readMoreSourceInput && readMoreUrlInput) {
+                const newSource = readMoreSourceInput.value.trim();
+                const newUrl = readMoreUrlInput.value.trim();
+
+                // Update original values for cancel
+                readMoreSourceInput.dataset.original = newSource;
+                readMoreUrlInput.dataset.original = newUrl;
+
+                // Update display
+                if (popupLinksDiv) {
+                    if (newUrl) {
+                        popupLinksDiv.innerHTML = `<a href="${newUrl}" target="_blank" class="popup-link">📰 Read More: ${newSource || 'Link'} →</a>`;
+                        popupLinksDiv.style.display = 'block';
+                    } else if (newSource) {
+                        popupLinksDiv.innerHTML = `<span class="popup-link">📰 Read More: ${newSource}</span>`;
+                        popupLinksDiv.style.display = 'block';
+                    } else {
+                        popupLinksDiv.style.display = 'none';
+                    }
+                } else if (newUrl || newSource) {
+                    // Create popup-links div if it doesn't exist
+                    const newLinksDiv = document.createElement('div');
+                    newLinksDiv.className = 'popup-links';
+                    if (newUrl) {
+                        newLinksDiv.innerHTML = `<a href="${newUrl}" target="_blank" class="popup-link">📰 Read More: ${newSource || 'Link'} →</a>`;
+                    } else {
+                        newLinksDiv.innerHTML = `<span class="popup-link">📰 Read More: ${newSource}</span>`;
+                    }
+                    // Insert before edit-only-fields
+                    const editOnlyFieldsDiv = popupBody.querySelector('.edit-only-fields');
+                    if (editOnlyFieldsDiv) {
+                        editOnlyFieldsDiv.parentNode.insertBefore(newLinksDiv, editOnlyFieldsDiv);
+                    }
+                }
+            }
+
             // Hide edit-only fields
             const editOnlyFields = popupBody.querySelector('.edit-only-fields');
             if (editOnlyFields) editOnlyFields.style.display = 'none';
@@ -2634,7 +2685,9 @@
                 recommendationText: recTextInput ? recTextInput.value.trim() : '',
                 recommendation: recSpan ? recSpan.textContent : (loc.recommendation || ''),
                 coords: editedCoords,
-                mapsUrl: mapsUrlInput ? mapsUrlInput.value : loc.mapsUrl
+                mapsUrl: mapsUrlInput ? mapsUrlInput.value : loc.mapsUrl,
+                readMoreSource: popupBody.querySelector('.read-more-source-input')?.value || '',
+                readMoreUrl: popupBody.querySelector('.read-more-url-input')?.value || ''
             };
 
             // Log the edited values to console for copy/paste
@@ -2761,7 +2814,9 @@
                 priority: 'Priority',
                 recommendation: 'Recommendation',
                 coords: 'Coordinates',
-                mapsUrl: 'Google Maps URL'
+                mapsUrl: 'Google Maps URL',
+                readMoreSource: 'Read More Source',
+                readMoreUrl: 'Read More URL'
             };
 
             // Check each location that has session edits
@@ -2809,6 +2864,12 @@
                 }
                 if (edits.mapsUrl !== loc.mapsUrl) {
                     changes.push({ field: 'mapsUrl', label: 'Google Maps URL', value: edits.mapsUrl });
+                }
+                if (edits.readMoreSource !== (loc.readMoreSource || '')) {
+                    changes.push({ field: 'readMoreSource', label: 'Read More Source', value: edits.readMoreSource });
+                }
+                if (edits.readMoreUrl !== (loc.readMoreUrl || '')) {
+                    changes.push({ field: 'readMoreUrl', label: 'Read More URL', value: edits.readMoreUrl });
                 }
 
                 if (changes.length > 0) {
