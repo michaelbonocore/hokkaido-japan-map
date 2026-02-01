@@ -2565,7 +2565,7 @@
         // Export changes function
         function exportChanges() {
             const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            let markdown = `## MAP EDITS - ${today}\n\n`;
+            let markdown = `**CLAUDE CODE INSTRUCTION: Update the Hokkaido interactive map (index.html) with the following changes. For each location listed, find the corresponding entry in the \`locations\` array and update only the fields shown.**\n\n## MAP EDITS - ${today}\n\n`;
             let hasChanges = false;
 
             const fieldLabels = {
