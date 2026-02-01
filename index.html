@@ -1940,8 +1940,13 @@
             const features = edits.features !== undefined ? edits.features : loc.features;
             const notes = edits.notes !== undefined ? edits.notes : loc.notes;
             const recommendation = edits.recommendation !== undefined ? edits.recommendation : (loc.recommendation || '');
-            const coords = edits.coords !== undefined ? edits.coords : loc.coords;
+            let coords = edits.coords !== undefined ? edits.coords : loc.coords;
             const mapsUrl = edits.mapsUrl !== undefined ? edits.mapsUrl : loc.mapsUrl;
+            // Extract full precision coords from mapsUrl for display
+            const urlCoordsMatch = mapsUrl.match(/[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+            if (urlCoordsMatch) {
+                coords = [parseFloat(urlCoordsMatch[1]), parseFloat(urlCoordsMatch[2])];
+            }
 
             let badges = '';
             if (loc.nationalPark) badges += '<span class="popup-badge">🏞️ National Park</span>';
@@ -2460,12 +2465,19 @@
                 return span ? span.textContent : '';
             };
 
-            // Parse coordinates
+            // Parse coordinates - prefer coords input, but also extract from mapsUrl if changed
             let editedCoords = loc.coords;
             if (coordsInput) {
                 const coordsMatch = coordsInput.value.match(/\[?\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\]?/);
                 if (coordsMatch) {
                     editedCoords = [parseFloat(coordsMatch[1]), parseFloat(coordsMatch[2])];
+                }
+            }
+            // Also extract coords from mapsUrl if it was edited (captures edits made via URL field)
+            if (mapsUrlInput && mapsUrlInput.value !== loc.mapsUrl) {
+                const urlCoordsMatch = mapsUrlInput.value.match(/[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+                if (urlCoordsMatch) {
+                    editedCoords = [parseFloat(urlCoordsMatch[1]), parseFloat(urlCoordsMatch[2])];
                 }
             }
 
