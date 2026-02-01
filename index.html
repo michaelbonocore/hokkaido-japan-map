@@ -1931,6 +1931,18 @@
             const catColor = categories[loc.category]?.color || '#666';
             const priorityClass = `priority-${loc.priority.toLowerCase()}`;
 
+            // Check for session edits - use edited values if they exist
+            const edits = sessionEdits[locIndex] || {};
+            const dates = edits.dates !== undefined ? edits.dates : loc.dates;
+            const bestTime = edits.bestTime !== undefined ? edits.bestTime : loc.bestTime;
+            const admission = edits.admission !== undefined ? edits.admission : loc.admission;
+            const permits = edits.permits !== undefined ? edits.permits : loc.permits;
+            const features = edits.features !== undefined ? edits.features : loc.features;
+            const notes = edits.notes !== undefined ? edits.notes : loc.notes;
+            const recommendation = edits.recommendation !== undefined ? edits.recommendation : (loc.recommendation || '');
+            const coords = edits.coords !== undefined ? edits.coords : loc.coords;
+            const mapsUrl = edits.mapsUrl !== undefined ? edits.mapsUrl : loc.mapsUrl;
+
             let badges = '';
             if (loc.nationalPark) badges += '<span class="popup-badge">🏞️ National Park</span>';
             if (loc.unesco) badges += '<span class="popup-badge">🏛️ UNESCO</span>';
@@ -1951,43 +1963,43 @@
                         <div class="popup-meta">
                             <div class="popup-meta-item" data-field="dates">
                                 <label>Dates</label>
-                                <span>${loc.dates}</span>
-                                <input type="text" class="editable-field" value="${loc.dates}" style="display:none;">
+                                <span>${dates}</span>
+                                <input type="text" class="editable-field" value="${dates}" style="display:none;">
                             </div>
                             <div class="popup-meta-item" data-field="bestTime">
                                 <label>Best Time</label>
-                                <span>${loc.bestTime}</span>
-                                <input type="text" class="editable-field" value="${loc.bestTime}" style="display:none;">
+                                <span>${bestTime}</span>
+                                <input type="text" class="editable-field" value="${bestTime}" style="display:none;">
                             </div>
                             <div class="popup-meta-item" data-field="admission">
                                 <label>Admission</label>
-                                <span>${loc.admission}</span>
-                                <input type="text" class="editable-field" value="${loc.admission}" style="display:none;">
+                                <span>${admission}</span>
+                                <input type="text" class="editable-field" value="${admission}" style="display:none;">
                             </div>
                             <div class="popup-meta-item" data-field="permits">
                                 <label>Permits</label>
-                                <span>${loc.permits}</span>
-                                <input type="text" class="editable-field" value="${loc.permits}" style="display:none;">
+                                <span>${permits}</span>
+                                <input type="text" class="editable-field" value="${permits}" style="display:none;">
                             </div>
                         </div>
-                        <div class="popup-features">${loc.features}</div>
-                        <textarea class="editable-field" data-field="features" style="display:none;">${loc.features}</textarea>
-                        <div class="popup-notes"><strong>Production Notes:</strong> <span class="popup-notes-text">${loc.notes}</span></div>
-                        <textarea class="editable-field" data-field="notes" style="display:none;">${loc.notes}</textarea>
-                        ${loc.recommendation ? `<div class="popup-recommendation ${loc.recommendationType}"><strong>Recommendation:</strong> <span class="popup-recommendation-text">${loc.recommendation}</span></div><textarea class="editable-field" data-field="recommendation" style="display:none;">${loc.recommendation}</textarea>` : ''}
+                        <div class="popup-features">${features}</div>
+                        <textarea class="editable-field" data-field="features" style="display:none;">${features}</textarea>
+                        <div class="popup-notes"><strong>Production Notes:</strong> <span class="popup-notes-text">${notes}</span></div>
+                        <textarea class="editable-field" data-field="notes" style="display:none;">${notes}</textarea>
+                        ${recommendation ? `<div class="popup-recommendation ${loc.recommendationType}"><strong>Recommendation:</strong> <span class="popup-recommendation-text">${recommendation}</span></div><textarea class="editable-field" data-field="recommendation" style="display:none;">${recommendation}</textarea>` : ''}
                         ${loc.readMoreUrl ? `<div class="popup-links"><a href="${loc.readMoreUrl}" target="_blank" class="popup-link">📰 Read More: ${loc.readMoreSource} →</a></div>` : ''}
                         <div class="popup-meta edit-only-fields" style="display:none; margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
                             <div class="popup-meta-item" data-field="coords">
                                 <label>📍 Coordinates</label>
-                                <input type="text" class="editable-field coords-input" value="[${loc.coords[0]}, ${loc.coords[1]}]" data-original="[${loc.coords[0]}, ${loc.coords[1]}]" oninput="updateMapsUrlFromCoords(this, ${locIndex})">
+                                <input type="text" class="editable-field coords-input" value="[${coords[0]}, ${coords[1]}]" data-original="[${loc.coords[0]}, ${loc.coords[1]}]" oninput="updateMapsUrlFromCoords(this, ${locIndex})">
                             </div>
                             <div class="popup-meta-item" data-field="mapsUrl">
                                 <label>🗺️ Maps URL</label>
-                                <input type="text" class="editable-field maps-url-input" value="${loc.mapsUrl}" data-original="${loc.mapsUrl}" style="font-size: 10px;">
+                                <input type="text" class="editable-field maps-url-input" value="${mapsUrl}" data-original="${loc.mapsUrl}" style="font-size: 10px;">
                             </div>
                         </div>
                         <div class="popup-buttons">
-                            <a href="${loc.mapsUrl}" target="_blank" class="popup-button maps-link" data-loc-index="${locIndex}">🗺️ Google Maps</a>
+                            <a href="${mapsUrl}" target="_blank" class="popup-button maps-link" data-loc-index="${locIndex}">🗺️ Google Maps</a>
                             <a href="https://www.google.com/search?q=${encodeURIComponent(loc.name + ' ' + loc.region + ' Japan')}&udm=2" target="_blank" class="popup-button secondary">🖼️ Images</a>
                         </div>
                         <div class="edit-actions">
@@ -2082,7 +2094,7 @@
             const marker = L.marker(loc.coords, {
                 icon: createMarkerIcon(color, loc.priority)
             });
-            marker.bindPopup(createPopupContent(loc, index), { maxWidth: 350 });
+            marker.bindPopup(() => createPopupContent(loc, index), { maxWidth: 350 });
 
             // Store marker reference with index for unique identification
             locationMarkers[index] = { marker, location: loc };
@@ -2433,18 +2445,38 @@
             popupBody.querySelector(`[data-save="${locIndex}"]`).style.display = 'none';
             popupBody.querySelector(`[data-cancel="${locIndex}"]`).style.display = 'none';
 
+            // Store edits in sessionEdits for persistence across popup close/reopen
+            const loc = locations[locIndex];
+            const getMetaValue = (field) => {
+                const item = popupBody.querySelector(`[data-field="${field}"]`);
+                const span = item?.querySelector('span');
+                return span ? span.textContent : '';
+            };
+
+            // Parse coordinates
+            let editedCoords = loc.coords;
+            if (coordsInput) {
+                const coordsMatch = coordsInput.value.match(/\[?\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*\]?/);
+                if (coordsMatch) {
+                    editedCoords = [parseFloat(coordsMatch[1]), parseFloat(coordsMatch[2])];
+                }
+            }
+
+            sessionEdits[locIndex] = {
+                dates: getMetaValue('dates'),
+                bestTime: getMetaValue('bestTime'),
+                admission: getMetaValue('admission'),
+                permits: getMetaValue('permits'),
+                features: featuresDiv ? featuresDiv.innerHTML : loc.features,
+                notes: notesSpan ? notesSpan.textContent : loc.notes,
+                recommendation: recSpan ? recSpan.textContent : (loc.recommendation || ''),
+                coords: editedCoords,
+                mapsUrl: mapsUrlInput ? mapsUrlInput.value : loc.mapsUrl
+            };
+
             // Log the edited values to console for copy/paste
-            console.log(`=== Location ${locIndex} Edits ===`);
-            popupBody.querySelectorAll('.popup-meta-item').forEach(item => {
-                const field = item.dataset.field;
-                const value = item.querySelector('span').textContent;
-                console.log(`${field}: "${value}"`);
-            });
-            if (featuresDiv) console.log(`features: "${featuresDiv.innerHTML}"`);
-            if (notesSpan) console.log(`notes: "${notesSpan.textContent}"`);
-            if (recSpan) console.log(`recommendation: "${recSpan.textContent}"`);
-            if (coordsInput) console.log(`coords: ${coordsInput.value}`);
-            if (mapsUrlInput) console.log(`mapsUrl: "${mapsUrlInput.value}"`);
+            console.log(`=== Location ${locIndex} Edits (stored in session) ===`);
+            console.log(sessionEdits[locIndex]);
         }
 
         // Cancel edits and restore original values
@@ -2508,6 +2540,8 @@
         // ===== EXPORT CHANGES FEATURE =====
         // Store original values for each location when first edited
         const sessionOriginals = {};
+        // Store all session edits persistently (survives popup close/reopen)
+        const sessionEdits = {};
 
         // Capture original values when entering edit mode
         function captureOriginalValues(locIndex) {
@@ -2524,52 +2558,6 @@
                 notes: loc.notes,
                 recommendation: loc.recommendation || '',
                 coords: `[${loc.coords[0]}, ${loc.coords[1]}]`,
-                mapsUrl: loc.mapsUrl
-            };
-        }
-
-        // Get current values from the popup or stored location
-        function getCurrentValues(locIndex) {
-            const loc = locations[locIndex];
-            const markerData = locationMarkers[locIndex];
-            const currentCoords = markerData ? markerData.location.coords : loc.coords;
-
-            // Try to get values from open popup first, fall back to location data
-            const popupBody = document.getElementById(`popup-body-${locIndex}`);
-            if (popupBody) {
-                const getMetaValue = (field) => {
-                    const item = popupBody.querySelector(`[data-field="${field}"]`);
-                    if (item) {
-                        const span = item.querySelector('span');
-                        return span ? span.textContent : '';
-                    }
-                    return '';
-                };
-
-                return {
-                    name: loc.name,
-                    dates: getMetaValue('dates') || loc.dates,
-                    bestTime: getMetaValue('bestTime') || loc.bestTime,
-                    admission: getMetaValue('admission') || loc.admission,
-                    permits: getMetaValue('permits') || loc.permits,
-                    features: popupBody.querySelector('.popup-features')?.innerHTML || loc.features,
-                    notes: popupBody.querySelector('.popup-notes-text')?.textContent || loc.notes,
-                    recommendation: popupBody.querySelector('.popup-recommendation-text')?.textContent || loc.recommendation || '',
-                    coords: `[${currentCoords[0]}, ${currentCoords[1]}]`,
-                    mapsUrl: popupBody.querySelector('.maps-link')?.href || loc.mapsUrl
-                };
-            }
-
-            return {
-                name: loc.name,
-                dates: loc.dates,
-                bestTime: loc.bestTime,
-                admission: loc.admission,
-                permits: loc.permits,
-                features: loc.features,
-                notes: loc.notes,
-                recommendation: loc.recommendation || '',
-                coords: `[${currentCoords[0]}, ${currentCoords[1]}]`,
                 mapsUrl: loc.mapsUrl
             };
         }
@@ -2592,25 +2580,47 @@
                 mapsUrl: 'Google Maps URL'
             };
 
-            // Check each location that was edited
-            Object.keys(sessionOriginals).sort((a, b) => parseInt(a) - parseInt(b)).forEach(locIndex => {
-                const original = sessionOriginals[locIndex];
-                const current = getCurrentValues(parseInt(locIndex));
+            // Check each location that has session edits
+            Object.keys(sessionEdits).sort((a, b) => parseInt(a) - parseInt(b)).forEach(locIndex => {
+                const loc = locations[parseInt(locIndex)];
+                const edits = sessionEdits[locIndex];
                 const changes = [];
 
-                // Compare each field
-                Object.keys(fieldLabels).forEach(field => {
-                    const origVal = (original[field] || '').trim();
-                    const currVal = (current[field] || '').trim();
-
-                    if (origVal !== currVal) {
-                        changes.push({ field, label: fieldLabels[field], value: currVal });
-                    }
-                });
+                // Compare edited values against original location data
+                if (edits.dates !== loc.dates) {
+                    changes.push({ field: 'dates', label: 'Dates', value: edits.dates });
+                }
+                if (edits.bestTime !== loc.bestTime) {
+                    changes.push({ field: 'bestTime', label: 'Best Time', value: edits.bestTime });
+                }
+                if (edits.admission !== loc.admission) {
+                    changes.push({ field: 'admission', label: 'Admission', value: edits.admission });
+                }
+                if (edits.permits !== loc.permits) {
+                    changes.push({ field: 'permits', label: 'Permits', value: edits.permits });
+                }
+                if (edits.features !== loc.features) {
+                    changes.push({ field: 'features', label: 'Features', value: edits.features });
+                }
+                if (edits.notes !== loc.notes) {
+                    changes.push({ field: 'notes', label: 'Production Notes', value: edits.notes });
+                }
+                if (edits.recommendation !== (loc.recommendation || '')) {
+                    changes.push({ field: 'recommendation', label: 'Recommendation', value: edits.recommendation });
+                }
+                // Compare coords as arrays
+                const origCoords = `[${loc.coords[0]}, ${loc.coords[1]}]`;
+                const editCoords = `[${edits.coords[0]}, ${edits.coords[1]}]`;
+                if (origCoords !== editCoords) {
+                    changes.push({ field: 'coords', label: 'Coordinates', value: editCoords });
+                }
+                if (edits.mapsUrl !== loc.mapsUrl) {
+                    changes.push({ field: 'mapsUrl', label: 'Google Maps URL', value: edits.mapsUrl });
+                }
 
                 if (changes.length > 0) {
                     hasChanges = true;
-                    markdown += `### Location #${parseInt(locIndex) + 1}: ${original.name}\n`;
+                    markdown += `### Location #${parseInt(locIndex) + 1}: ${loc.name}\n`;
                     changes.forEach(change => {
                         // For long text fields, use a different format
                         if (['features', 'notes', 'recommendation'].includes(change.field) && change.value.length > 80) {
