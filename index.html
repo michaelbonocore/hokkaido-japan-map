@@ -1901,19 +1901,14 @@
             }
         ];
 
-        // Transportation segments
+        // Transportation segments - station to station connections
         const transportSegments = [
-            { from: 'Tokyo', to: 'Ginzan Onsen', fromCoords: [35.6812, 139.7671], toCoords: [38.5697, 140.5311], mode: 'Train + Bus', duration: '3.5-4 hours', cost: '~$90', date: 'Day 1' },
-            { from: 'Ginzan Onsen', to: 'Morioka', fromCoords: [38.5697, 140.5311], toCoords: [39.7016, 141.1345], mode: 'Bus + Shinkansen', duration: '2.5-3 hours', cost: '~$40', date: 'Day 2' },
-            { from: 'Morioka', to: 'Shin-Hakodate-Hokuto', fromCoords: [39.7016, 141.1345], toCoords: [41.9044, 140.6478], mode: 'Hokkaido Shinkansen', duration: '2 hours', cost: '~$67', date: 'Day 3', notes: 'Through Seikan Tunnel - world\'s longest undersea tunnel' },
-            { from: 'Shin-Hakodate-Hokuto', to: 'Hakodate', fromCoords: [41.9044, 140.6478], toCoords: [41.7731, 140.7281], mode: 'JR Hakodate Liner', duration: '20-25 min', cost: '¥440', date: 'Day 3' },
-            { from: 'Hakodate', to: 'Onuma Park', fromCoords: [41.7731, 140.7281], toCoords: [41.9889, 140.6653], mode: 'JR', duration: '25-40 min', cost: '¥540-1,170', date: 'Day 5' },
-            { from: 'Hakodate Area', to: 'Noboribetsu', fromCoords: [41.7739, 140.7267], toCoords: [42.4933, 141.1478], mode: 'Train or Car', duration: '2.5-3 hours', cost: '~$50-60', date: 'Day 5' },
-            { from: 'Noboribetsu', to: 'Lake Toya', fromCoords: [42.4933, 141.1478], toCoords: [42.6103, 140.8567], mode: 'Car or Bus', duration: '45 min', cost: '~$10', date: 'Day 6' },
-            { from: 'Lake Toya', to: 'Otaru', fromCoords: [42.6103, 140.8567], toCoords: [43.1972, 141.0028], mode: 'Car', duration: '2 hours', cost: 'Tolls ~$15', date: 'Day 6' },
-            { from: 'Otaru', to: 'Sapporo', fromCoords: [43.1972, 141.0028], toCoords: [43.0686, 141.3508], mode: 'JR', duration: '30-45 min', cost: '¥750', date: 'Day 7' },
-            { from: 'Sapporo', to: 'New Chitose Airport', fromCoords: [43.0686, 141.3508], toCoords: [42.7752, 141.6925], mode: 'JR Airport Express', duration: '37 min', cost: '¥1,150', date: 'Day 9' },
-            { from: 'Sapporo', to: 'Niseko', fromCoords: [43.0686, 141.3508], toCoords: [42.8633, 140.7000], mode: 'Bus or Car', duration: '2-2.5 hours', cost: '~$20', date: 'Optional', notes: 'Day trip or overnight' }
+            { from: 'Tokyo Station', to: 'Morioka Station', fromCoords: [35.679183, 139.76716], toCoords: [39.7016, 141.1345], mode: 'Tohoku Shinkansen (Hayabusa)', duration: '2h 10min', cost: '~¥15,000 (~$100)', date: 'Day 1 (March 2)', notes: 'Depart Tokyo ~9:00 AM, arrive Morioka ~11:15 AM' },
+            { from: 'Morioka Station', to: 'Shin-Hakodate-Hokuto Station', fromCoords: [39.7016, 141.1345], toCoords: [41.9044, 140.6478], mode: 'Hokkaido Shinkansen', duration: '2h', cost: '~¥10,000 (~$67)', date: 'Day 2 (March 3)', notes: 'Through Seikan Tunnel - world\'s longest undersea tunnel' },
+            { from: 'Shin-Hakodate-Hokuto Station', to: 'Hakodate Station', fromCoords: [41.9044, 140.6478], toCoords: [41.7731, 140.7281], mode: 'JR Hakodate Liner', duration: '20min', cost: '¥440', date: 'Day 2 (March 3)' },
+            { from: 'Hakodate Station', to: 'Otaru Station', fromCoords: [41.7731, 140.7281], toCoords: [43.1972, 141.0028], mode: 'JR Limited Express + Local', duration: '4-5h', cost: '~¥8,000 (~$53)', date: 'Day 3 (March 4)', notes: 'Via Sapporo or direct depending on schedule' },
+            { from: 'Otaru Station', to: 'Sapporo Station', fromCoords: [43.1972, 141.0028], toCoords: [43.0686, 141.3508], mode: 'JR Rapid', duration: '30min', cost: '¥750', date: 'Day 4 (March 5)' },
+            { from: 'Sapporo Station', to: 'New Chitose Airport', fromCoords: [43.0686, 141.3508], toCoords: [42.7752, 141.6925], mode: 'JR Airport Express', duration: '37min', cost: '¥1,150', date: 'Day 7 (March 8)', notes: 'Depart for Tokyo Haneda flight' }
         ];
 
         // Initialize map centered on Hokkaido
