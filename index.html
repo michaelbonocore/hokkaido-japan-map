@@ -263,20 +263,57 @@
             margin-top: 10px;
             line-height: 1.4;
         }
-        .popup-recommendation.recommended {
+        .popup-recommendation.recommended, .popup-recommendation.priority-high {
             background: #d4edda;
             border-left: 4px solid #28a745;
         }
-        .popup-recommendation.not-recommended {
+        .popup-recommendation.not-recommended, .popup-recommendation.priority-not-recommended {
             background: #f8d7da;
             border-left: 4px solid #dc3545;
         }
-        .popup-recommendation.conditional {
+        .popup-recommendation.conditional, .popup-recommendation.priority-medium {
             background: #fff3cd;
             border-left: 4px solid #ffc107;
         }
         .popup-recommendation strong {
             color: #333;
+        }
+        .recommendation-edit-container {
+            margin-top: 10px;
+            display: none;
+        }
+        .popup-body.editing .recommendation-edit-container {
+            display: block;
+        }
+        .priority-dropdown {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            background: white;
+        }
+        .priority-dropdown.priority-high {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .priority-dropdown.priority-medium {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        .priority-dropdown.priority-not-recommended {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .recommendation-text-input {
+            width: 100%;
+            min-height: 60px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            resize: vertical;
         }
         .region-popup .popup-body {
             padding: 15px;
@@ -1055,7 +1092,7 @@
                 admission: '¥4,500 (~$30)',
                 permits: 'Yes - contact restaurant; reservations recommended',
                 features: "This is the wanko soba challenge. Servers keep refilling your tiny bowl while chanting encouragement, and when you can't eat anymore, you stop the challenge by putting the lid on your bowl. About 15 small bowls equals one regular serving, and JNTO says most people land around 80 bowls.",
-                notes: "Azumaya's been around since 1907 and it's popular, so you'll want to reserve ahead of time, especially if you're filming. The challenge comes with a bunch of toppings (tuna, mushrooms, etc.) so it doesn't get repetitive, and it's perfect for a Jaron vs Sarah competition bit.",
+                notes: "Azumaya's been around since 1907 and it's popular, so you'll want to reserve ahead of time, especially if you're filming. The challenge comes with a bunch of toppings (tuna, mushrooms, etc.) so it doesn't get repetitive, and it's perfect for a Jaron vs Sarah competition bit. 25-30 minute walk from the station or hotel.",
                 unesco: false,
                 nationalPark: false,
                 mapsUrl: 'https://maps.google.com/?q=39.701550737711315,141.15654032738402',
@@ -1830,8 +1867,8 @@
                 mapsUrl: 'https://maps.google.com/?q=39.6714,141.1536',
                 readMoreUrl: 'https://www.nationalgeographic.com/travel/article/artisan-crafts-talismans-tohoku-japan',
                 readMoreSource: 'National Geographic',
-                priority: 'High',
-                recommendation: "HIGH PRIORITY. Core Day 1 craft content. Free admission. Contact them ahead of time to confirm hours and ask about seeing the casting process.",
+                priority: 'Medium',
+                recommendation: "MEDIUM PRIORITY. Core Day 1 craft content. I think the story and visuals are great, however it requires an Uber/Taxi. Free admission. Contact them ahead of time to confirm hours and ask about seeing the casting process.",
                 recommendationType: 'recommended'
             },
             {
@@ -1841,11 +1878,11 @@
                 region: 'Tohoku',
                 coords: [39.703381569694294, 141.14820832321212],
                 dates: 'Day 1 (March 2)',
-                bestTime: 'Lunch or Dinner (pairs with yakiniku)',
-                admission: '¥950-1,000 (~$6-7)',
-                permits: 'No for personal',
-                features: "THE BIRTHPLACE of Morioka Reimen (1954). Founded by Korean immigrant Teruhito Aoki. Chewy potato starch noodles in cold beef/chicken broth with seasonal fruit on top. They also have high-quality yakiniku.",
-                notes: "10-15 min walk from Morioka Station (World In GEN Plaza 2F). Lunch 11:30am-3pm, Dinner 5pm-11pm. The story here is Korean immigration and flavors adapted over 70 years. One of the 'Three Great Noodles of Morioka.'",
+                bestTime: 'Mon-Sat 11:30-15:00, 17:00-22:00',
+                admission: '¥950-1,000',
+                permits: 'No permit needed, but call ahead for filming permission. Handheld only, no tripods.',
+                features: "This is the original Morioka reimen spot, opened in 1954. Cold, chewy potato-starch noodles in a beef and chicken broth, built off Korean-style cold noodles. Comes with kimchi, cucumber, and egg. You can add yakiniku (grill-your-own BBQ) if you want the full origin-story meal.",
+                notes: "Third and final stop of the Three Noodles challenge. Located downtown at Odori 1-8-2, about a 15-minute walk from Morioka Station (longer if it's icy, consider Uber/taxi). Hours can shift, so confirm by phone the day before.",
                 unesco: false,
                 nationalPark: false,
                 birthplace: 'Morioka Reimen',
@@ -1853,7 +1890,7 @@
                 readMoreUrl: 'https://livejapan.com/en/in-tohoku/in-pref-iwate/in-morioka_hiraizumi_hachimantai/article-a3000223/',
                 readMoreSource: 'LIVE JAPAN',
                 priority: 'High',
-                recommendation: "HIGH PRIORITY. Day 1 food origin story (Korean immigrant narrative). Quick stop, cheap. Part of the 'three noodles of Morioka' challenge.",
+                recommendation: "HIGH PRIORITY. Third stop of the Three Noodles challenge. The cold noodles are a refreshing finish after the heavier dishes. This is where reimen was invented in 1954.",
                 recommendationType: 'recommended'
             },
             {
@@ -1864,10 +1901,10 @@
                 coords: [39.702286, 141.152167],
                 dates: 'Day 1 (March 2)',
                 bestTime: '9:00-21:00 (main store hours)',
-                admission: '¥730 (medium) + ¥50 Chitantan (~$5-6)',
+                admission: '¥730 (medium) + ¥50 Chitantan',
                 permits: 'No for personal',
                 features: "This is where jajamen was invented, about 70 years ago (post-WWII). Flat udon-like noodles with a secret meat miso sauce that contains over 15 ingredients. There's a unique ritual: crack a raw egg into the remaining sauce, add broth, and you get 'Chitantan' finishing soup.",
-                notes: "Primary plan is Pairon Honten (main store), about a 25-minute walk from the station. Hours are flexible (9:00-21:00). Fesan station branch is a backup if timing gets tight. Small seating, expect crowds. This is your second stop of the Three Noodles challenge.",
+                notes: "Primary plan is Pairon Honten (main store), which is close by the first and third noodle locations. Hours are flexible (9:00-21:00). Fesan station branch is a backup if timing gets tight. Small seating, expect crowds. This is your second stop of the Three Noodles challenge.",
                 unesco: false,
                 nationalPark: false,
                 birthplace: 'Morioka Jajamen',
@@ -1883,7 +1920,7 @@
                 nameLocal: '盛岡ニューシティホテル',
                 category: 'Lodging',
                 region: 'Tohoku',
-                coords: [39.70344927562309, 141.1375493923631],
+                coords: [39.703311, 141.13749],
                 dates: 'Day 1 (March 2)',
                 bestTime: 'Check-in after 3pm',
                 admission: '$32/room ($64 for 2 rooms)',
@@ -1892,7 +1929,7 @@
                 notes: "2 rooms needed. Attempt to check-in after arrival, before the noodle crawl.",
                 unesco: false,
                 nationalPark: false,
-                mapsUrl: 'https://maps.google.com/?q=39.70344927562309,141.1375493923631',
+                mapsUrl: 'https://maps.google.com/?q=39.703311,141.13749',
                 readMoreUrl: 'https://www.hotels.com/ho719174752/morioka-new-city-hotel-morioka-japan/',
                 readMoreSource: 'Hotels.com',
                 priority: 'High',
@@ -2000,6 +2037,24 @@
                 coords = [parseFloat(urlCoordsMatch[1]), parseFloat(urlCoordsMatch[2])];
             }
 
+            // Parse priority from recommendation text
+            let currentPriority = 'high'; // default
+            let recommendationText = recommendation;
+            if (recommendation.startsWith('HIGH PRIORITY.')) {
+                currentPriority = 'high';
+                recommendationText = recommendation.replace(/^HIGH PRIORITY\.\s*/, '');
+            } else if (recommendation.startsWith('MEDIUM PRIORITY.')) {
+                currentPriority = 'medium';
+                recommendationText = recommendation.replace(/^MEDIUM PRIORITY\.\s*/, '');
+            } else if (recommendation.startsWith('NOT RECOMMENDED')) {
+                currentPriority = 'not-recommended';
+                recommendationText = recommendation.replace(/^NOT RECOMMENDED[^.]*\.\s*/, '');
+            }
+
+            // Determine recommendation color class
+            const recColorClass = currentPriority === 'high' ? 'priority-high' :
+                                  currentPriority === 'medium' ? 'priority-medium' : 'priority-not-recommended';
+
             let badges = '';
             if (loc.nationalPark) badges += '<span class="popup-badge">🏞️ National Park</span>';
             if (loc.unesco) badges += '<span class="popup-badge">🏛️ UNESCO</span>';
@@ -2043,7 +2098,17 @@
                         <textarea class="editable-field" data-field="features" style="display:none;">${features}</textarea>
                         <div class="popup-notes"><strong>Production Notes:</strong> <span class="popup-notes-text">${notes}</span></div>
                         <textarea class="editable-field" data-field="notes" style="display:none;">${notes}</textarea>
-                        ${recommendation ? `<div class="popup-recommendation ${loc.recommendationType}"><strong>Recommendation:</strong> <span class="popup-recommendation-text">${recommendation}</span></div><textarea class="editable-field" data-field="recommendation" style="display:none;">${recommendation}</textarea>` : ''}
+                        ${recommendation ? `<div class="popup-recommendation ${recColorClass}" data-current-priority="${currentPriority}"><strong>Recommendation:</strong> <span class="popup-recommendation-text">${recommendation}</span></div>
+                        <div class="recommendation-edit-container">
+                            <label style="font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; display: block;">Priority Level:</label>
+                            <select class="priority-dropdown ${recColorClass}" data-field="priority" onchange="updatePriorityColor(this)">
+                                <option value="high" ${currentPriority === 'high' ? 'selected' : ''}>High Priority</option>
+                                <option value="medium" ${currentPriority === 'medium' ? 'selected' : ''}>Medium Priority</option>
+                                <option value="not-recommended" ${currentPriority === 'not-recommended' ? 'selected' : ''}>Not Recommended</option>
+                            </select>
+                            <label style="font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; display: block; margin-top: 8px;">Recommendation Details:</label>
+                            <textarea class="recommendation-text-input" data-field="recommendationText">${recommendationText}</textarea>
+                        </div>` : ''}
                         ${loc.readMoreUrl ? `<div class="popup-links"><a href="${loc.readMoreUrl}" target="_blank" class="popup-link">📰 Read More: ${loc.readMoreSource} →</a></div>` : ''}
                         <div class="popup-meta edit-only-fields" style="display:none; margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
                             <div class="popup-meta-item" data-field="coords">
@@ -2403,9 +2468,11 @@
             const features = popupBody.querySelector('.popup-features');
             const notes = popupBody.querySelector('.popup-notes');
             const recommendation = popupBody.querySelector('.popup-recommendation');
+            const recEditContainer = popupBody.querySelector('.recommendation-edit-container');
             if (features) features.style.display = 'none';
             if (notes) notes.style.display = 'none';
             if (recommendation) recommendation.style.display = 'none';
+            if (recEditContainer) recEditContainer.style.display = 'block';
 
             // Show edit-only fields (coordinates, maps URL)
             const editOnlyFields = popupBody.querySelector('.edit-only-fields');
@@ -2452,15 +2519,34 @@
                 notesTextarea.style.display = 'none';
             }
 
-            // Update recommendation
-            const recTextarea = popupBody.querySelector('textarea[data-field="recommendation"]');
+            // Update recommendation from priority dropdown + text
+            const priorityDropdown = popupBody.querySelector('.priority-dropdown');
+            const recTextInput = popupBody.querySelector('.recommendation-text-input');
             const recSpan = popupBody.querySelector('.popup-recommendation-text');
             const recDiv = popupBody.querySelector('.popup-recommendation');
-            if (recTextarea && recSpan && recDiv) {
-                recSpan.textContent = recTextarea.value;
+            const recEditContainer = popupBody.querySelector('.recommendation-edit-container');
+
+            if (priorityDropdown && recTextInput && recSpan && recDiv) {
+                const priority = priorityDropdown.value;
+                const recText = recTextInput.value.trim();
+
+                // Build full recommendation string
+                let priorityPrefix = '';
+                if (priority === 'high') priorityPrefix = 'HIGH PRIORITY. ';
+                else if (priority === 'medium') priorityPrefix = 'MEDIUM PRIORITY. ';
+                else if (priority === 'not-recommended') priorityPrefix = 'NOT RECOMMENDED THIS TRIP. ';
+
+                const fullRecommendation = priorityPrefix + recText;
+                recSpan.textContent = fullRecommendation;
+
+                // Update color class on recommendation div
+                recDiv.classList.remove('priority-high', 'priority-medium', 'priority-not-recommended', 'recommended', 'conditional', 'not-recommended');
+                recDiv.classList.add('priority-' + priority);
+                recDiv.dataset.currentPriority = priority;
+
                 recDiv.style.display = 'block';
-                recTextarea.style.display = 'none';
             }
+            if (recEditContainer) recEditContainer.style.display = 'none';
 
             // Update coordinates and marker position
             const coordsInput = popupBody.querySelector('.coords-input');
@@ -2533,6 +2619,10 @@
                 }
             }
 
+            // Get priority value for export
+            const editedPriority = priorityDropdown ? priorityDropdown.value : 'high';
+            const priorityMap = { 'high': 'High', 'medium': 'Medium', 'not-recommended': 'Not Recommended' };
+
             sessionEdits[locIndex] = {
                 dates: getMetaValue('dates'),
                 bestTime: getMetaValue('bestTime'),
@@ -2540,6 +2630,8 @@
                 permits: getMetaValue('permits'),
                 features: featuresDiv ? featuresDiv.innerHTML : loc.features,
                 notes: notesSpan ? notesSpan.textContent : loc.notes,
+                priority: priorityMap[editedPriority],
+                recommendationText: recTextInput ? recTextInput.value.trim() : '',
                 recommendation: recSpan ? recSpan.textContent : (loc.recommendation || ''),
                 coords: editedCoords,
                 mapsUrl: mapsUrlInput ? mapsUrlInput.value : loc.mapsUrl
@@ -2586,9 +2678,11 @@
             const features = popupBody.querySelector('.popup-features');
             const notes = popupBody.querySelector('.popup-notes');
             const recommendation = popupBody.querySelector('.popup-recommendation');
+            const recEditContainer = popupBody.querySelector('.recommendation-edit-container');
             if (features) features.style.display = 'block';
             if (notes) notes.style.display = 'block';
             if (recommendation) recommendation.style.display = 'block';
+            if (recEditContainer) recEditContainer.style.display = 'none';
 
             // Restore edit-only fields to original values and hide
             const coordsInput = popupBody.querySelector('.coords-input');
@@ -2618,6 +2712,12 @@
                     mapsUrlInput.value = `https://maps.google.com/?q=${lat},${lng}`;
                 }
             }
+        }
+
+        // Update priority dropdown color based on selection
+        function updatePriorityColor(dropdown) {
+            dropdown.classList.remove('priority-high', 'priority-medium', 'priority-not-recommended');
+            dropdown.classList.add('priority-' + dropdown.value);
         }
 
         // ===== EXPORT CHANGES FEATURE =====
@@ -2658,6 +2758,7 @@
                 permits: 'Permits',
                 features: 'Features',
                 notes: 'Production Notes',
+                priority: 'Priority',
                 recommendation: 'Recommendation',
                 coords: 'Coordinates',
                 mapsUrl: 'Google Maps URL'
@@ -2688,8 +2789,17 @@
                 if (edits.notes !== loc.notes) {
                     changes.push({ field: 'notes', label: 'Production Notes', value: edits.notes });
                 }
-                if (edits.recommendation !== (loc.recommendation || '')) {
-                    changes.push({ field: 'recommendation', label: 'Recommendation', value: edits.recommendation });
+                // Export priority and recommendation as separate fields
+                if (edits.priority && edits.priority !== loc.priority) {
+                    changes.push({ field: 'priority', label: 'Priority', value: edits.priority });
+                }
+                if (edits.recommendationText !== undefined) {
+                    // Parse original recommendation text (without priority prefix)
+                    let origRecText = loc.recommendation || '';
+                    origRecText = origRecText.replace(/^(HIGH PRIORITY|MEDIUM PRIORITY|NOT RECOMMENDED[^.]*)\.\s*/, '');
+                    if (edits.recommendationText !== origRecText) {
+                        changes.push({ field: 'recommendation', label: 'Recommendation', value: edits.recommendationText });
+                    }
                 }
                 // Compare coords as arrays - export as "lat, lng" format for code updates
                 const origCoords = `${loc.coords[0]}, ${loc.coords[1]}`;
