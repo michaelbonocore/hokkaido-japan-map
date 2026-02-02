@@ -3380,11 +3380,13 @@
             // Check each location that has session edits
             Object.keys(sessionEdits).sort((a, b) => parseInt(a) - parseInt(b)).forEach(locIndex => {
                 const loc = locations[parseInt(locIndex)];
+                const orig = sessionOriginals[locIndex] || {}; // Original values before any edits
                 const edits = sessionEdits[locIndex];
                 const changes = [];
 
-                // Compare edited values against original location data
-                if (edits.dates !== loc.dates) {
+                // Compare edited values against ORIGINAL location data (not current loc, which may have been updated)
+                // Use orig for fields that get updated in the locations array (like dates for days nav)
+                if (edits.dates !== (orig.dates || loc.dates)) {
                     changes.push({ field: 'dates', label: 'Dates', value: edits.dates });
                 }
                 if (edits.bestTime !== loc.bestTime) {
@@ -3415,7 +3417,9 @@
                     }
                 }
                 // Compare coords as arrays - export as "lat, lng" format for code updates
-                const origCoords = `${loc.coords[0]}, ${loc.coords[1]}`;
+                // Use orig.coords if available since loc.coords gets updated when marker moves
+                const origCoordsArr = orig.coords ? orig.coords.match(/(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)/) : null;
+                const origCoords = origCoordsArr ? `${origCoordsArr[1]}, ${origCoordsArr[2]}` : `${loc.coords[0]}, ${loc.coords[1]}`;
                 const editCoords = `${edits.coords[0]}, ${edits.coords[1]}`;
                 if (origCoords !== editCoords) {
                     changes.push({ field: 'coords', label: 'Coordinates', value: editCoords });
