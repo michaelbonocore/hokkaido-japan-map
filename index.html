@@ -406,6 +406,40 @@
             font-size: 0.85rem;
             resize: vertical;
         }
+        /* Dates dropdown styles */
+        .dates-dropdown {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            background: white;
+        }
+        .dates-multi-container {
+            display: none;
+            margin-top: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .dates-multi-container.visible {
+            display: block;
+        }
+        .dates-checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px;
+        }
+        .dates-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+        }
+        .dates-checkbox-item input {
+            margin: 0;
+        }
         .region-popup .popup-body {
             padding: 15px;
         }
@@ -2255,6 +2289,70 @@
             const recColorClass = currentPriority === 'high' ? 'priority-high' :
                                   currentPriority === 'medium' ? 'priority-medium' : 'priority-not-recommended';
 
+            // Parse dates to determine dropdown selection
+            const datesOptions = [
+                { value: 'day1', label: 'Day 1 - March 2', pattern: /Day\s*1/i },
+                { value: 'day2', label: 'Day 2 - March 3', pattern: /Day\s*2/i },
+                { value: 'day3', label: 'Day 3 - March 4', pattern: /Day\s*3/i },
+                { value: 'day4', label: 'Day 4 - March 5', pattern: /Day\s*4/i },
+                { value: 'day5', label: 'Day 5 - March 6', pattern: /Day\s*5/i },
+                { value: 'day6', label: 'Day 6 - March 7', pattern: /Day\s*6/i },
+                { value: 'day7', label: 'Day 7 - March 8', pattern: /Day\s*7/i },
+                { value: 'optional', label: 'Optional', pattern: /optional/i }
+            ];
+
+            // Check for multi-day pattern (e.g., "Days 2-3" or "Day 2, Day 3")
+            const multiDayMatch = dates.match(/Days?\s*(\d+)\s*[-–,]\s*(\d+)/i);
+            let selectedDates = 'day1';
+            let isMultiDay = false;
+            let selectedDays = [];
+
+            if (multiDayMatch) {
+                isMultiDay = true;
+                const start = parseInt(multiDayMatch[1]);
+                const end = parseInt(multiDayMatch[2]);
+                for (let i = start; i <= end; i++) {
+                    selectedDays.push(i);
+                }
+                selectedDates = 'multiple';
+            } else if (dates.toLowerCase().includes('optional')) {
+                selectedDates = 'optional';
+            } else {
+                // Find single day match
+                for (const opt of datesOptions) {
+                    if (opt.pattern && opt.pattern.test(dates)) {
+                        selectedDates = opt.value;
+                        break;
+                    }
+                }
+            }
+
+            // Build dates dropdown HTML
+            const datesDropdownHtml = `
+                <select class="dates-dropdown" data-field="datesDropdown" onchange="handleDatesDropdownChange(this, ${locIndex})">
+                    <option value="day1" ${selectedDates === 'day1' ? 'selected' : ''}>Day 1 - March 2</option>
+                    <option value="day2" ${selectedDates === 'day2' ? 'selected' : ''}>Day 2 - March 3</option>
+                    <option value="day3" ${selectedDates === 'day3' ? 'selected' : ''}>Day 3 - March 4</option>
+                    <option value="day4" ${selectedDates === 'day4' ? 'selected' : ''}>Day 4 - March 5</option>
+                    <option value="day5" ${selectedDates === 'day5' ? 'selected' : ''}>Day 5 - March 6</option>
+                    <option value="day6" ${selectedDates === 'day6' ? 'selected' : ''}>Day 6 - March 7</option>
+                    <option value="day7" ${selectedDates === 'day7' ? 'selected' : ''}>Day 7 - March 8</option>
+                    <option value="multiple" ${selectedDates === 'multiple' ? 'selected' : ''}>Multiple Days</option>
+                    <option value="optional" ${selectedDates === 'optional' ? 'selected' : ''}>Optional</option>
+                </select>
+                <div class="dates-multi-container ${isMultiDay ? 'visible' : ''}" data-multi-dates="${locIndex}">
+                    <div class="dates-checkbox-group">
+                        <label class="dates-checkbox-item"><input type="checkbox" value="1" ${selectedDays.includes(1) ? 'checked' : ''}> Day 1</label>
+                        <label class="dates-checkbox-item"><input type="checkbox" value="2" ${selectedDays.includes(2) ? 'checked' : ''}> Day 2</label>
+                        <label class="dates-checkbox-item"><input type="checkbox" value="3" ${selectedDays.includes(3) ? 'checked' : ''}> Day 3</label>
+                        <label class="dates-checkbox-item"><input type="checkbox" value="4" ${selectedDays.includes(4) ? 'checked' : ''}> Day 4</label>
+                        <label class="dates-checkbox-item"><input type="checkbox" value="5" ${selectedDays.includes(5) ? 'checked' : ''}> Day 5</label>
+                        <label class="dates-checkbox-item"><input type="checkbox" value="6" ${selectedDays.includes(6) ? 'checked' : ''}> Day 6</label>
+                        <label class="dates-checkbox-item"><input type="checkbox" value="7" ${selectedDays.includes(7) ? 'checked' : ''}> Day 7</label>
+                    </div>
+                </div>
+            `;
+
             let badges = '';
             if (loc.nationalPark) badges += '<span class="popup-badge">🏞️ National Park</span>';
             if (loc.unesco) badges += '<span class="popup-badge">🏛️ UNESCO</span>';
@@ -2275,8 +2373,10 @@
                         <div class="popup-meta">
                             <div class="popup-meta-item" data-field="dates">
                                 <label>Dates</label>
-                                <span>${dates}</span>
-                                <input type="text" class="editable-field" value="${dates}" style="display:none;">
+                                <span class="dates-display">${dates}</span>
+                                <div class="dates-edit-container" style="display:none;">
+                                    ${datesDropdownHtml}
+                                </div>
                             </div>
                             <div class="popup-meta-item" data-field="bestTime">
                                 <label>Best Time</label>
@@ -2845,6 +2945,12 @@
                 }
             });
 
+            // Show dates dropdown (special handling - uses dropdown instead of input)
+            const datesDisplay = popupBody.querySelector('.dates-display');
+            const datesEditContainer = popupBody.querySelector('.dates-edit-container');
+            if (datesDisplay) datesDisplay.style.display = 'none';
+            if (datesEditContainer) datesEditContainer.style.display = 'block';
+
             // Show textareas for features, notes, recommendation
             popupBody.querySelectorAll('textarea.editable-field').forEach(textarea => {
                 textarea.style.display = 'block';
@@ -2885,6 +2991,18 @@
                     input.style.display = 'none';
                 }
             });
+
+            // Update dates from dropdown (special handling)
+            const datesDisplay = popupBody.querySelector('.dates-display');
+            const datesEditContainer = popupBody.querySelector('.dates-edit-container');
+            if (datesDisplay && datesEditContainer) {
+                const newDates = getDatesValue(popupBody);
+                datesDisplay.textContent = newDates;
+                datesDisplay.style.display = 'inline';
+                datesEditContainer.style.display = 'none';
+                // Also update the locations array so days navigation updates
+                locations[locIndex].dates = newDates;
+            }
 
             // Update features
             const featuresTextarea = popupBody.querySelector('textarea[data-field="features"]');
@@ -3070,6 +3188,9 @@
             console.log(`=== Location ${locIndex} Edits (stored in session) ===`);
             console.log(sessionEdits[locIndex]);
 
+            // Rebuild days navigation in case dates changed
+            buildDaysNav();
+
             // If marker moved, pan map to new position and reopen popup
             if (markerMoved && newMarkerPos) {
                 const markerData = locationMarkers[locIndex];
@@ -3098,6 +3219,39 @@
                     input.style.display = 'none';
                 }
             });
+
+            // Restore dates field (special handling - uses dropdown instead of input)
+            const datesDisplay = popupBody.querySelector('.dates-display');
+            const datesEditContainer = popupBody.querySelector('.dates-edit-container');
+            const datesDropdown = popupBody.querySelector('.dates-dropdown');
+            const multiContainer = popupBody.querySelector('.dates-multi-container');
+            if (datesDisplay) datesDisplay.style.display = 'inline';
+            if (datesEditContainer) datesEditContainer.style.display = 'none';
+            if (multiContainer) multiContainer.classList.remove('visible');
+            // Reset dropdown to match current display value
+            if (datesDropdown && datesDisplay) {
+                const currentDates = datesDisplay.textContent;
+                // Try to match to a dropdown value
+                if (currentDates.match(/Day\s*1/i) && !currentDates.match(/Days?\s*\d+\s*[-–,]/i)) {
+                    datesDropdown.value = 'day1';
+                } else if (currentDates.match(/Day\s*2/i) && !currentDates.match(/Days?\s*\d+\s*[-–,]/i)) {
+                    datesDropdown.value = 'day2';
+                } else if (currentDates.match(/Day\s*3/i) && !currentDates.match(/Days?\s*\d+\s*[-–,]/i)) {
+                    datesDropdown.value = 'day3';
+                } else if (currentDates.match(/Day\s*4/i) && !currentDates.match(/Days?\s*\d+\s*[-–,]/i)) {
+                    datesDropdown.value = 'day4';
+                } else if (currentDates.match(/Day\s*5/i) && !currentDates.match(/Days?\s*\d+\s*[-–,]/i)) {
+                    datesDropdown.value = 'day5';
+                } else if (currentDates.match(/Day\s*6/i) && !currentDates.match(/Days?\s*\d+\s*[-–,]/i)) {
+                    datesDropdown.value = 'day6';
+                } else if (currentDates.match(/Day\s*7/i) && !currentDates.match(/Days?\s*\d+\s*[-–,]/i)) {
+                    datesDropdown.value = 'day7';
+                } else if (currentDates.match(/optional/i)) {
+                    datesDropdown.value = 'optional';
+                } else {
+                    datesDropdown.value = 'multiple';
+                }
+            }
 
             // Hide textareas, show display divs
             popupBody.querySelectorAll('textarea.editable-field').forEach(textarea => {
@@ -3147,6 +3301,52 @@
         function updatePriorityColor(dropdown) {
             dropdown.classList.remove('priority-high', 'priority-medium', 'priority-not-recommended');
             dropdown.classList.add('priority-' + dropdown.value);
+        }
+
+        // Handle dates dropdown change
+        function handleDatesDropdownChange(dropdown, locIndex) {
+            const multiContainer = document.querySelector(`[data-multi-dates="${locIndex}"]`);
+            if (dropdown.value === 'multiple') {
+                multiContainer.classList.add('visible');
+            } else {
+                multiContainer.classList.remove('visible');
+            }
+        }
+
+        // Get formatted dates value from dropdown/checkboxes
+        function getDatesValue(popupBody) {
+            const dropdown = popupBody.querySelector('.dates-dropdown');
+            if (!dropdown) return '';
+
+            const value = dropdown.value;
+            const dayLabels = {
+                'day1': 'Day 1 (March 2)',
+                'day2': 'Day 2 (March 3)',
+                'day3': 'Day 3 (March 4)',
+                'day4': 'Day 4 (March 5)',
+                'day5': 'Day 5 (March 6)',
+                'day6': 'Day 6 (March 7)',
+                'day7': 'Day 7 (March 8)',
+                'optional': 'Optional'
+            };
+
+            if (value === 'multiple') {
+                const checkboxes = popupBody.querySelectorAll('.dates-checkbox-group input:checked');
+                const days = Array.from(checkboxes).map(cb => parseInt(cb.value)).sort((a, b) => a - b);
+                if (days.length === 0) return 'Optional';
+                if (days.length === 1) return dayLabels['day' + days[0]];
+
+                // Check if consecutive
+                const isConsecutive = days.every((day, i) => i === 0 || day === days[i-1] + 1);
+                if (isConsecutive) {
+                    const marchDates = { 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8 };
+                    return `Days ${days[0]}-${days[days.length-1]} (March ${marchDates[days[0]]}-${marchDates[days[days.length-1]]})`;
+                } else {
+                    return days.map(d => 'Day ' + d).join(', ');
+                }
+            }
+
+            return dayLabels[value] || value;
         }
 
         // ===== EXPORT CHANGES FEATURE =====
