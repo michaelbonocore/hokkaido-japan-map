@@ -2585,7 +2585,6 @@
 
         // ===== DAYS NAVIGATION =====
         // Day route lines layer
-        let currentDayRoute = null;
 
         // Define days structure
         const daysConfig = [
@@ -2716,12 +2715,6 @@
                 }
             });
 
-            // Remove any existing day route
-            if (currentDayRoute) {
-                map.removeLayer(currentDayRoute);
-                currentDayRoute = null;
-            }
-
             // Toggle this day
             const isExpanding = !header.classList.contains('expanded');
             header.classList.toggle('expanded');
@@ -2736,17 +2729,6 @@
                     // Fit map to show all locations for this day
                     const bounds = L.latLngBounds(dayLocs.map(loc => loc.coords));
                     map.fitBounds(bounds.pad(0.2));
-
-                    // Draw route line connecting locations in order
-                    if (dayLocs.length > 1) {
-                        const routeCoords = dayLocs.map(loc => loc.coords);
-                        currentDayRoute = L.polyline(routeCoords, {
-                            color: '#2196F3',
-                            weight: 2,
-                            opacity: 0.5,
-                            dashArray: '8, 12'
-                        }).addTo(map);
-                    }
                 }
             }
         }
