@@ -2653,6 +2653,7 @@
         // Build Days navigation UI
         function buildDaysNav() {
             const container = document.getElementById('days-nav');
+            container.innerHTML = ''; // Clear existing content before rebuilding
             const dayGroups = groupLocationsByDay();
 
             daysConfig.forEach(dayConfig => {
