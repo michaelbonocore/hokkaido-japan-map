@@ -126,6 +126,97 @@
             padding: 2px 8px;
             border-radius: 10px;
         }
+        /* Days Navigation Styles */
+        .days-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .day-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .day-header:hover {
+            background: #e9ecef;
+        }
+        .day-header.expanded {
+            background: #e3f2fd;
+            border-left: 3px solid #2196F3;
+        }
+        .day-number {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #333;
+            min-width: 50px;
+        }
+        .day-location {
+            font-size: 0.8rem;
+            color: #666;
+            flex: 1;
+        }
+        .day-count {
+            font-size: 0.7rem;
+            color: #999;
+            background: #e0e0e0;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+        .day-toggle {
+            margin-left: 8px;
+            color: #999;
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+        .day-header.expanded .day-toggle {
+            transform: rotate(180deg);
+        }
+        .day-locations {
+            display: none;
+            padding: 4px 0 8px 12px;
+            border-left: 2px solid #e0e0e0;
+            margin-left: 24px;
+        }
+        .day-locations.expanded {
+            display: block;
+        }
+        .day-location-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #444;
+            gap: 8px;
+        }
+        .day-location-item:hover {
+            background: #f0f0f0;
+        }
+        .day-location-item.high-priority {
+            font-weight: 600;
+        }
+        .day-location-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .day-location-name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .day-location-time {
+            font-size: 0.7rem;
+            color: #999;
+        }
         .special-item {
             display: flex;
             align-items: center;
@@ -779,6 +870,10 @@
     </div>
 
     <div class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+            <h3>📅 Itinerary</h3>
+            <div class="days-nav" id="days-nav"></div>
+        </div>
         <div class="sidebar-section">
             <h3>Categories</h3>
             <div id="category-legend"></div>
@@ -2389,6 +2484,177 @@
             item.onclick = () => toggleCategory(cat);
             legendContainer.appendChild(item);
         });
+
+        // ===== DAYS NAVIGATION =====
+        // Day route lines layer
+        let currentDayRoute = null;
+
+        // Define days structure
+        const daysConfig = [
+            { day: 1, label: 'Day 1', location: 'Morioka', date: 'March 2' },
+            { day: 2, label: 'Day 2', location: 'Hakodate', date: 'March 3' },
+            { day: 3, label: 'Day 3', location: 'Hakodate → Otaru', date: 'March 4' },
+            { day: 4, label: 'Day 4', location: 'Otaru/Ski Day', date: 'March 5' },
+            { day: 5, label: 'Day 5', location: 'Sapporo', date: 'March 6' },
+            { day: 6, label: 'Day 6', location: 'Sapporo', date: 'March 7' },
+            { day: 7, label: 'Day 7', location: 'Departure', date: 'March 8' },
+            { day: 0, label: 'Optional', location: 'Not This Trip', date: '' }
+        ];
+
+        // Parse day from dates field
+        function parseDayFromDates(dates, recommendation) {
+            if (!dates) return [0];
+
+            // Check if NOT RECOMMENDED in recommendation
+            if (recommendation && recommendation.toUpperCase().includes('NOT RECOMMENDED')) {
+                return [0];
+            }
+
+            // Check for optional
+            if (dates.toLowerCase().includes('optional')) {
+                return [0];
+            }
+
+            // Parse "Day X" or "Days X-Y" patterns
+            const dayMatch = dates.match(/Day\s*(\d+)/i);
+            const daysMatch = dates.match(/Days?\s*(\d+)\s*[-–]\s*(\d+)/i);
+
+            if (daysMatch) {
+                const start = parseInt(daysMatch[1]);
+                const end = parseInt(daysMatch[2]);
+                const days = [];
+                for (let i = start; i <= end; i++) {
+                    days.push(i);
+                }
+                return days;
+            }
+
+            if (dayMatch) {
+                return [parseInt(dayMatch[1])];
+            }
+
+            return [0]; // Default to optional
+        }
+
+        // Group locations by day
+        function groupLocationsByDay() {
+            const dayGroups = {};
+            daysConfig.forEach(d => dayGroups[d.day] = []);
+
+            locations.forEach((loc, index) => {
+                const days = parseDayFromDates(loc.dates, loc.recommendation);
+                days.forEach(day => {
+                    if (dayGroups[day] !== undefined) {
+                        dayGroups[day].push({ ...loc, index });
+                    }
+                });
+            });
+
+            return dayGroups;
+        }
+
+        // Build Days navigation UI
+        function buildDaysNav() {
+            const container = document.getElementById('days-nav');
+            const dayGroups = groupLocationsByDay();
+
+            daysConfig.forEach(dayConfig => {
+                const dayLocs = dayGroups[dayConfig.day] || [];
+                if (dayLocs.length === 0) return;
+
+                // Day header
+                const header = document.createElement('div');
+                header.className = 'day-header';
+                header.dataset.day = dayConfig.day;
+                header.innerHTML = `
+                    <span class="day-number">${dayConfig.label}</span>
+                    <span class="day-location">${dayConfig.location}</span>
+                    <span class="day-count">${dayLocs.length} stops</span>
+                    <span class="day-toggle">▼</span>
+                `;
+                header.onclick = () => toggleDay(dayConfig.day);
+
+                // Locations list
+                const locList = document.createElement('div');
+                locList.className = 'day-locations';
+                locList.dataset.dayList = dayConfig.day;
+
+                dayLocs.forEach(loc => {
+                    const item = document.createElement('div');
+                    item.className = 'day-location-item';
+                    if (loc.priority === 'High') item.classList.add('high-priority');
+
+                    const catColor = categories[loc.category]?.color || '#666';
+                    item.innerHTML = `
+                        <span class="day-location-dot" style="background: ${catColor}"></span>
+                        <span class="day-location-name">${loc.name}</span>
+                    `;
+                    item.onclick = (e) => {
+                        e.stopPropagation();
+                        navigateToLocation(loc.index);
+                    };
+                    locList.appendChild(item);
+                });
+
+                container.appendChild(header);
+                container.appendChild(locList);
+            });
+        }
+
+        // Toggle day expansion
+        function toggleDay(day) {
+            const header = document.querySelector(`[data-day="${day}"]`);
+            const locList = document.querySelector(`[data-day-list="${day}"]`);
+
+            // Close other days
+            document.querySelectorAll('.day-header.expanded').forEach(h => {
+                if (h.dataset.day != day) {
+                    h.classList.remove('expanded');
+                }
+            });
+            document.querySelectorAll('.day-locations.expanded').forEach(l => {
+                if (l.dataset.dayList != day) {
+                    l.classList.remove('expanded');
+                }
+            });
+
+            // Remove any existing day route
+            if (currentDayRoute) {
+                map.removeLayer(currentDayRoute);
+                currentDayRoute = null;
+            }
+
+            // Toggle this day
+            const isExpanding = !header.classList.contains('expanded');
+            header.classList.toggle('expanded');
+            locList.classList.toggle('expanded');
+
+            if (isExpanding) {
+                // Get locations for this day and fit map
+                const dayGroups = groupLocationsByDay();
+                const dayLocs = dayGroups[day] || [];
+
+                if (dayLocs.length > 0) {
+                    // Fit map to show all locations for this day
+                    const bounds = L.latLngBounds(dayLocs.map(loc => loc.coords));
+                    map.fitBounds(bounds.pad(0.2));
+
+                    // Draw route line connecting locations in order
+                    if (dayLocs.length > 1) {
+                        const routeCoords = dayLocs.map(loc => loc.coords);
+                        currentDayRoute = L.polyline(routeCoords, {
+                            color: '#2196F3',
+                            weight: 2,
+                            opacity: 0.5,
+                            dashArray: '8, 12'
+                        }).addTo(map);
+                    }
+                }
+            }
+        }
+
+        // Initialize Days nav
+        buildDaysNav();
 
         // Toggle functions
         function toggleSidebar() {
