@@ -2046,7 +2046,7 @@
         // Transportation segments - station to station connections
         const transportSegments = [
             { from: 'Tokyo Station', to: 'Morioka Station', fromCoords: [35.679183, 139.76716], toCoords: [39.7016, 141.1345], mode: 'Tohoku Shinkansen (Hayabusa)', duration: '2h 10min', cost: '~¥15,000 (~$100)', date: 'Day 1 (March 2)', notes: 'Depart Tokyo ~9:00 AM, arrive Morioka ~11:15 AM' },
-            { from: 'Morioka Station', to: 'Shin-Hakodate-Hokuto Station', fromCoords: [39.7016, 141.1345], toCoords: [41.9044, 140.6478], mode: 'Hokkaido Shinkansen', duration: '2h', cost: '~¥10,000 (~$67)', date: 'Day 2 (March 3)', notes: 'Through Seikan Tunnel - world\'s longest undersea tunnel' },
+            { from: 'Morioka Station', to: 'Shin-Hakodate-Hokuto Station', fromCoords: [39.7016, 141.1345], toCoords: [41.9044, 140.6478], waypoints: [[41.3167, 140.3167]], mode: 'Hokkaido Shinkansen', duration: '2h', cost: '~¥10,000 (~$67)', date: 'Day 2 (March 3)', notes: 'Through Seikan Tunnel - world\'s longest undersea tunnel' },
             { from: 'Shin-Hakodate-Hokuto Station', to: 'Hakodate Station', fromCoords: [41.9044, 140.6478], toCoords: [41.7731, 140.7281], mode: 'JR Hakodate Liner', duration: '20min', cost: '¥440', date: 'Day 2 (March 3)' },
             { from: 'Hakodate Station', to: 'Otaru Station', fromCoords: [41.7731, 140.7281], toCoords: [43.1972, 141.0028], mode: 'JR Limited Express + Local', duration: '4-5h', cost: '~¥8,000 (~$53)', date: 'Day 3 (March 4)', notes: 'Via Sapporo or direct depending on schedule' },
             { from: 'Otaru Station', to: 'Sapporo Station', fromCoords: [43.1972, 141.0028], toCoords: [43.0686, 141.3508], mode: 'JR Rapid', duration: '30min', cost: '¥750', date: 'Day 4 (March 5)' },
@@ -2352,7 +2352,14 @@
 
         // Add transport routes
         transportSegments.forEach(segment => {
-            const polyline = L.polyline([segment.fromCoords, segment.toCoords], {
+            // Build path: fromCoords → waypoints (if any) → toCoords
+            const pathCoords = [segment.fromCoords];
+            if (segment.waypoints) {
+                pathCoords.push(...segment.waypoints);
+            }
+            pathCoords.push(segment.toCoords);
+
+            const polyline = L.polyline(pathCoords, {
                 color: '#6c757d',
                 weight: 2,
                 opacity: 0.6,
