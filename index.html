@@ -923,10 +923,6 @@
                 <div class="legend-color" style="background: #6c757d;"></div>
                 <span class="legend-label">Transportation Routes</span>
             </div>
-            <div class="legend-item" onclick="toggleLayer('regions')">
-                <div class="legend-color" style="background: #ffc107;"></div>
-                <span class="legend-label">Regional Overviews</span>
-            </div>
         </div>
         <div class="sidebar-section">
             <h3>🚕 Transport Note</h3>
@@ -988,78 +984,10 @@
             'Onsen/Hot Spring': { color: '#e83e8c', description: 'Hot spring areas, bathing experiences, geothermal sites' },
             'Winter Activity': { color: '#17a2b8', description: 'Ski resorts, ice fishing, frozen lake activities' },
             'Transport Hub': { color: '#6c757d', description: 'Train stations, airports, major transit points' },
-            'Regional Overview': { color: '#ffc107', description: 'City/area summary markers for navigation' },
             'Wildlife': { color: '#20c997', description: 'Animal encounters, nature experiences with wildlife' },
             'Craft/Culture': { color: '#9c27b0', description: 'Traditional crafts, artisan workshops, cultural shopping' },
             'Lodging': { color: '#4A90D9', description: 'Hotels, ryokans, accommodations' }
         };
-
-        // Regional overviews
-        const regions = [
-            {
-                name: 'Tokyo',
-                coords: [35.6812, 139.7671],
-                dateRange: 'Day 1 (Departure)',
-                locationCount: 1,
-                themes: 'Departure point, Shinkansen experience begins',
-                hub: 'Tokyo Station - Tohoku/Hokkaido Shinkansen departure',
-                budget: 'Transit only'
-            },
-            {
-                name: 'Tohoku',
-                coords: [38.5000, 140.5000],
-                dateRange: 'Days 1-3',
-                locationCount: 8,
-                themes: 'Spirited Away fantasy (Ginzan Onsen), Snow Monsters, Three Great Noodles, samurai history, train journey storytelling',
-                hub: 'Sendai or Morioka Station - both on Tohoku Shinkansen mainline',
-                budget: '$800-1200'
-            },
-            {
-                name: 'Hakodate Area',
-                coords: [41.7739, 140.7267],
-                dateRange: 'Days 3-5',
-                locationCount: 11,
-                themes: 'East meets West architecture, morning market live squid fishing, million-dollar night view, hot spring monkeys, frozen lake activities',
-                hub: 'Hakodate Station - Hokkaido Shinkansen terminus, tram system',
-                budget: '$600-900'
-            },
-            {
-                name: 'Lake Toya-Noboribetsu',
-                coords: [42.5500, 141.0000],
-                dateRange: 'Days 5-6',
-                locationCount: 6,
-                themes: 'Volcanic drama, Hell Valley, active geology, "Hokkaido\'s Fuji," healing waters',
-                hub: 'Rental car recommended or JR to Noboribetsu Station + bus',
-                budget: '$400-600'
-            },
-            {
-                name: 'Otaru',
-                coords: [43.1972, 141.0028],
-                dateRange: 'Day 6-7',
-                locationCount: 3,
-                themes: 'Historic canal, sushi capital, romantic winter atmosphere, glasswork',
-                hub: 'Otaru Station - 30min from Sapporo on JR',
-                budget: '$300-400'
-            },
-            {
-                name: 'Sapporo',
-                coords: [43.0621, 141.3544],
-                dateRange: 'Days 7-9',
-                locationCount: 6,
-                themes: 'Urban finale, miso ramen birthplace, beer history, snow festival (if timing aligns), nightlife',
-                hub: 'Sapporo Station - hub for all Hokkaido rail, subway system',
-                budget: '$500-700'
-            },
-            {
-                name: 'Niseko-Rusutsu',
-                coords: [42.8047, 140.7000],
-                dateRange: 'Optional Day 8-9',
-                locationCount: 2,
-                themes: 'World-class powder skiing, Mount Yotei views, international ski culture',
-                hub: 'Rental car from Sapporo or resort shuttle buses',
-                budget: '$400-800'
-            }
-        ];
 
         // All locations
         const locations = [
@@ -2470,14 +2398,11 @@
 
         // Layer groups
         const categoryLayers = {};
-        const regionLayer = L.layerGroup();
         const transportLayer = L.layerGroup();
 
         // Initialize category layers
         Object.keys(categories).forEach(cat => {
-            if (cat !== 'Regional Overview') {
-                categoryLayers[cat] = L.layerGroup().addTo(map);
-            }
+            categoryLayers[cat] = L.layerGroup().addTo(map);
         });
 
         // Create custom marker icon
@@ -2496,27 +2421,6 @@
                 "></div>`,
                 iconSize: [size + border*2, size + border*2],
                 iconAnchor: [(size + border*2)/2, (size + border*2)/2]
-            });
-        }
-
-        // Create region marker icon
-        function createRegionIcon() {
-            return L.divIcon({
-                className: 'region-marker',
-                html: `<div style="
-                    width: 24px;
-                    height: 24px;
-                    background: #ffc107;
-                    border: 3px solid rgba(255,255,255,0.9);
-                    border-radius: 50%;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 12px;
-                ">📍</div>`,
-                iconSize: [30, 30],
-                iconAnchor: [15, 15]
             });
         }
 
@@ -2715,34 +2619,6 @@
             `;
         }
 
-        // Create region popup content
-        function createRegionPopupContent(region) {
-            return `
-                <div class="region-popup">
-                    <div class="popup-header" style="background: #1a5f7a">
-                        <h3>${region.name} Region</h3>
-                        <div class="popup-badges">
-                            <span class="popup-badge">${region.dateRange}</span>
-                        </div>
-                    </div>
-                    <div class="popup-body">
-                        <div class="region-stats">
-                            <div class="region-stat">
-                                <div class="region-stat-value">${region.locationCount}</div>
-                                <div class="region-stat-label">Locations</div>
-                            </div>
-                            <div class="region-stat">
-                                <div class="region-stat-value">${region.budget}</div>
-                                <div class="region-stat-label">Est. Budget</div>
-                            </div>
-                        </div>
-                        <div class="popup-features"><strong>Key Themes:</strong> ${region.themes}</div>
-                        <div class="popup-notes" style="margin-top: 10px;"><strong>Logistics Hub:</strong> ${region.hub}</div>
-                    </div>
-                </div>
-            `;
-        }
-
         // Create transport popup content
         function createTransportPopupContent(segment) {
             let notesHtml = segment.notes ? `<div class="popup-notes" style="margin-top: 10px;">${segment.notes}</div>` : '';
@@ -2807,15 +2683,6 @@
             }
         });
 
-        // Add region markers
-        regions.forEach(region => {
-            const marker = L.marker(region.coords, {
-                icon: createRegionIcon()
-            });
-            marker.bindPopup(createRegionPopupContent(region), { maxWidth: 320 });
-            marker.addTo(regionLayer);
-        });
-
         // Add transport routes
         transportSegments.forEach(segment => {
             // Build path: fromCoords → waypoints (if any) → toCoords
@@ -2836,13 +2703,11 @@
         });
 
         // Add layers to map
-        regionLayer.addTo(map);
         transportLayer.addTo(map);
 
         // Build category legend
         const legendContainer = document.getElementById('category-legend');
         Object.keys(categories).forEach(cat => {
-            if (cat === 'Regional Overview') return;
             const count = categoryCounts[cat] || 0;
             const item = document.createElement('div');
             item.className = 'legend-item';
@@ -3033,12 +2898,6 @@
                     map.removeLayer(transportLayer);
                 } else {
                     map.addLayer(transportLayer);
-                }
-            } else if (type === 'regions') {
-                if (map.hasLayer(regionLayer)) {
-                    map.removeLayer(regionLayer);
-                } else {
-                    map.addLayer(regionLayer);
                 }
             }
         }
