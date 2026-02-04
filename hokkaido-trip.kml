@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Hokkaido Japan Trip - March 2026</name>
+    <description>7-day production itinerary from Tokyo through Tohoku to Hokkaido</description>
+
+    <!-- Style Definitions -->
+    <Style id="high-priority">
+      <IconStyle>
+        <color>ff00aa00</color>
+        <scale>1.2</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/paddle/grn-circle.png</href></Icon>
+      </IconStyle>
+    </Style>
+    <Style id="medium-priority">
+      <IconStyle>
+        <color>ff00d4ff</color>
+        <scale>1.0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png</href></Icon>
+      </IconStyle>
+    </Style>
+    <Style id="not-recommended">
+      <IconStyle>
+        <color>ff0000ff</color>
+        <scale>0.8</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href></Icon>
+      </IconStyle>
+    </Style>
+    <Style id="lodging">
+      <IconStyle>
+        <color>ffff00ff</color>
+        <scale>1.1</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/paddle/purple-circle.png</href></Icon>
+      </IconStyle>
+    </Style>
+    <Style id="transport">
+      <IconStyle>
+        <color>ffff8800</color>
+        <scale>1.0</scale>
+        <Icon><href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href></Icon>
+      </IconStyle>
+    </Style>
+    <Style id="route-line">
+      <LineStyle>
+        <color>ff0066ff</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
+
+    <!-- Day 1 (Mar 2) — Tokyo → Morioka -->
+    <Folder>
+      <name>Day 1 (Mar 2) — Tokyo → Morioka</name>
+      <Placemark>
+        <name>Tokyo Station</name>
+        <description><![CDATA[<b>Category:</b> Transport Hub<br><b>Dates:</b> Day 1 morning<br><b>Best Time:</b> Early morning (6:00-7:00 AM)<br><b>Price:</b> Free<br><b>Features:</b> This is where the trip starts. The bullet train platforms (20-23) are pretty dramatic with the sleek trains lined up. The station's red brick facade on the Marunouchi side makes for good opening shots.<br><b>Recommendation:</b> Quick stop before boarding. Grab some ekiben footage and go.]]></description>
+        <styleUrl>#transport</styleUrl>
+        <Point><coordinates>139.76716,35.679183,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Morioka Station</name>
+        <description><![CDATA[<b>Category:</b> Transport Hub<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> Arrival around 11:15 AM<br><b>Price:</b> Free<br><b>Features:</b> Your Day 1 arrival and day 2 departure location.<br><b>Recommendation:</b> HIGH PRIORITY. REQUIRED STOP.]]></description>
+        <styleUrl>#transport</styleUrl>
+        <Point><coordinates>141.1345,39.7016,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>APA Hotel Morioka Ekimae</name>
+        <description><![CDATA[<b>Category:</b> Lodging<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> Check-in after 3pm<br><b>Price:</b> $95.50<br><b>Features:</b> Recently opened business hotel in central Morioka. 3 minute walk to the station and all Day 1 food stops.<br><b>Recommendation:</b> BOOKED. Day 1 overnight. New business hotel near station.]]></description>
+        <styleUrl>#lodging</styleUrl>
+        <Point><coordinates>141.13729344859027,39.70294267405387,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Azumaya Honten - Wanko Soba</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> 11:00–15:00, then 17:00–19:00 (last order)<br><b>Price:</b> ¥4,500 (~$30)<br><b>Features:</b> This is the wanko soba challenge. Servers keep refilling your tiny bowl while chanting encouragement.<br><b>Recommendation:</b> HIGH PRIORITY. First stop of the Three Noodles challenge.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.15654032738402,39.701550737711315,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Pairon Honten</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> 9:00-21:00 (main store hours)<br><b>Price:</b> ¥730 (medium) + ¥50 Chitantan<br><b>Features:</b> This is where jajamen was invented, about 70 years ago (post-WWII). Flat udon-like noodles with a secret meat miso sauce.<br><b>Recommendation:</b> HIGH PRIORITY. Second stop of the Three Noodles challenge.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.152167,39.702286,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Shokudoen</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> Mon-Sat 11:30-15:00, 17:00-22:00<br><b>Price:</b> ¥950-1,000<br><b>Features:</b> This is the original Morioka reimen spot, opened in 1954. Cold, chewy potato-starch noodles in a beef and chicken broth.<br><b>Recommendation:</b> HIGH PRIORITY. Third stop of the Three Noodles challenge.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.14820832321212,39.703381569694294,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>IWACHU Ironware Museum</name>
+        <description><![CDATA[<b>Category:</b> Craft/Culture<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> 10:00am - 5:00pm (closed Tuesdays)<br><b>Price:</b> Free<br><b>Features:</b> Japan's largest Nanbu Ironware producer, operating since 1902. You can watch artisans doing casting, mold-making, and lacquer work.<br><b>Recommendation:</b> MEDIUM PRIORITY. Great story and visuals, requires Uber/Taxi.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.1536,39.6714,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>MALIOS Observation Room</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> 9:00-18:00<br><b>Price:</b> Free<br><b>Features:</b> Great view of the city and Mount Iwate.<br><b>Recommendation:</b> MEDIUM PRIORITY. Optional first stop after arriving.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.13380938240851,39.701565640981,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Kaiunbashi Bridge &amp; Mount Iwate View</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> Morning or late afternoon for good light<br><b>Price:</b> Free<br><b>Features:</b> Simple 'where are we' shot. River, commuters, weather. If it's clear, you get a clean view toward Mount Iwate.<br><b>Recommendation:</b> MEDIUM PRIORITY. Great city establishing shot.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.139278,39.7028234,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Iwate Bank Red Brick Building</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> 10:00-17:00 (last entry 16:30), closed Tuesdays<br><b>Price:</b> ¥300<br><b>Features:</b> Early 1900s bank building that's still in the middle of daily Morioka life.<br><b>Recommendation:</b> MEDIUM PRIORITY. Worth a quick interior walk if nearby.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.1552,39.7005,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Ishiwari-zakura (Rock-Splitting Cherry Tree)</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> Anytime during daylight<br><b>Price:</b> Free<br><b>Features:</b> A big, old cherry tree literally growing out of a cracked boulder.<br><b>Recommendation:</b> MEDIUM PRIORITY. Easy detour if you're walking to Iwate Park.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.1512,39.7038,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Iwate Park (Morioka Castle Ruins)</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Day 1 (March 2)<br><b>Best Time:</b> Anytime during daylight<br><b>Price:</b> Free<br><b>Features:</b> Adds a 'castle town' layer to the story. Stone walls, paths, and winter drama if there's still snow.<br><b>Recommendation:</b> MEDIUM PRIORITY. Good texture shots.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.1502,39.7001,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+
+    <!-- Day 2 (Mar 3) — Morioka → Hakodate -->
+    <Folder>
+      <name>Day 2 (Mar 3) — Morioka → Hakodate</name>
+      <Placemark>
+        <name>Seikan Tunnel</name>
+        <description><![CDATA[<b>Category:</b> Transport Hub<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Train passes through around 9:30-10:00 AM<br><b>Price:</b> Included in Shinkansen ticket<br><b>Features:</b> The world's longest undersea rail tunnel by total length. 53.85 km total.<br><b>Recommendation:</b> MEDIUM PRIORITY. Not a filming location, but a story beat.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>140.3167,41.3167,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Shin-Hakodate-Hokuto Station</name>
+        <description><![CDATA[<b>Category:</b> Transport Hub<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Late morning to early afternoon<br><b>Price:</b> Free<br><b>Features:</b> This is where the Shinkansen terminates in Hokkaido. Good spot for 'we made it to Hokkaido' arrival shots.<br><b>Recommendation:</b> PASS-THROUGH. Quick arrival shots, then transfer to Hakodate.]]></description>
+        <styleUrl>#transport</styleUrl>
+        <Point><coordinates>140.646389,41.905278,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Hakodate Station</name>
+        <description><![CDATA[<b>Category:</b> Transport Hub<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Arrival early afternoon<br><b>Price:</b> Free<br><b>Features:</b> Your Hakodate hub. The famous morning market is right next to the station.<br><b>Recommendation:</b> HIGH PRIORITY. Two train options to Otaru on Day 3.]]></description>
+        <styleUrl>#transport</styleUrl>
+        <Point><coordinates>140.72651310427375,41.774395310848945,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Premier Hotel - Cabin President Hakodate</name>
+        <description><![CDATA[<b>Category:</b> Lodging<br><b>Dates:</b> Days 2-3 (March 3-4)<br><b>Best Time:</b> Try to check in on arrival<br><b>Price:</b> $91.92<br><b>Features:</b> Right across the street from Hakodate Station. The location is the main advantage.<br><b>Recommendation:</b> BOOKED. Location across from station saves time on travel days.]]></description>
+        <styleUrl>#lodging</styleUrl>
+        <Point><coordinates>140.72662825151073,41.7728483661847,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Mount Hakodate Ropeway</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Sunset through evening<br><b>Price:</b> ¥1,800 round trip<br><b>Features:</b> Called the 'Million Dollar Night View'. The city lights are pinched between two dark bays, creating an hourglass shape.<br><b>Recommendation:</b> This is your Day 2 hero shot. Arrive at least 30 minutes before sunset.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>140.7140859418369,41.761527878904246,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Motomachi Historic District</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Morning for churches, afternoon for harbor<br><b>Price:</b> Free (some buildings charge entry)<br><b>Features:</b> Hakodate was one of the first Japanese ports opened to foreign trade. Mix of Japanese and Western architecture.<br><b>Recommendation:</b> HIGH PRIORITY. Good Day 2 afternoon walking content.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>140.7108,41.7650,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Hakodate Orthodox Church</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Night for dramatic lighting; morning for interior<br><b>Price:</b> ¥200 donation<br><b>Features:</b> Russian Orthodox church with distinctive white walls and green roof.<br><b>Recommendation:</b> HIGH PRIORITY. Include if you're doing the Motomachi walking segment.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>140.7114,41.7644,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Kanemori Red Brick Warehouse</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Blue hour/night for reflections<br><b>Price:</b> Free entry; shops inside<br><b>Features:</b> Old warehouse district from 1869, now a Hokkaido Heritage Site. Red bricks, white snow, bay in the background.<br><b>Recommendation:</b> HIGH PRIORITY. Nice B-roll at blue hour.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>140.71693722474183,41.766403578726155,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Hachimanzaka Slope</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Early morning or late afternoon<br><b>Price:</b> Free<br><b>Features:</b> The classic Hakodate shot. A steep slope with a straight view down to the harbor.<br><b>Recommendation:</b> HIGH PRIORITY. This is THE iconic Hakodate image.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>140.71178254722906,41.76408946810358,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Former Hakodate Ward Public Hall</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Afternoon<br><b>Price:</b> ¥300 if entering, free for exterior<br><b>Features:</b> Big, ornate Western-style building from 1910. It's the visual payoff for the 'treaty port' history angle.<br><b>Recommendation:</b> HIGH PRIORITY. Best single building for the 'opened port city' story.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>140.70902629011388,41.76525387001839,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Motomachi Park</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Afternoon<br><b>Price:</b> Free<br><b>Features:</b> Open space between the Motomachi hills. Good for wide city context shots.<br><b>Recommendation:</b> MEDIUM PRIORITY. Good reset spot. Skip if running behind.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>140.70948308631833,41.76546359549913,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Roman Catholic Motomachi Church</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 2 (March 3)<br><b>Best Time:</b> Afternoon<br><b>Price:</b> Free<br><b>Features:</b> Gothic-style Catholic church near the Orthodox church.<br><b>Recommendation:</b> MEDIUM PRIORITY. Quick add-on if you're already at the Orthodox church.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>140.71334782598635,41.763382964841696,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+
+    <!-- Day 3 (Mar 4) — Hakodate → Otaru -->
+    <Folder>
+      <name>Day 3 (Mar 4) — Hakodate → Otaru</name>
+      <Placemark>
+        <name>Hakodate Morning Market</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Day 3 (March 4)<br><b>Best Time:</b> 6:00 AM to 9:00 AM<br><b>Price:</b> Free<br><b>Features:</b> Big market area by the station with seafood stalls. About 250 shops. Live squid fishing at Ekini Market.<br><b>Recommendation:</b> HIGH PRIORITY. The live squid fishing is the content. Get there before 7am.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>140.72564611566813,41.77223478701721,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Goryokaku Fort &amp; Tower</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 3 (March 4)<br><b>Best Time:</b> Morning for tower views; dusk for illumination<br><b>Price:</b> Tower ¥1,000; Fort grounds free<br><b>Features:</b> A star-shaped Western-style fort from 1866. You can only really see the star shape from the observation tower.<br><b>Recommendation:</b> MEDIUM PRIORITY. Cool aerial view, but not essential. Include if Day 3 timing allows.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>140.7569,41.7964,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Yunokawa Onsen - Hot Spring Monkeys</name>
+        <description><![CDATA[<b>Category:</b> Wildlife<br><b>Dates:</b> Day 3 (March 4)<br><b>Best Time:</b> Midday when monkeys most active<br><b>Price:</b> ¥300<br><b>Features:</b> Japanese macaques (wild monkeys) bathing in their own hot spring pool. Like the famous Nagano snow monkeys but way less crowded.<br><b>Recommendation:</b> HIGH PRIORITY. Monkeys. In a hot spring. In the snow. Hit it Day 3 afternoon before taking the train to Otaru.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>140.78955691190924,41.77402721100936,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Otaru Station</name>
+        <description><![CDATA[<b>Category:</b> Transport Hub<br><b>Dates:</b> Days 3-4 (March 4-5)<br><b>Best Time:</b> Arrival late afternoon<br><b>Price:</b> Free<br><b>Features:</b> Small, charming station in the canal town. The famous canal and sushi street are walking distance.<br><b>Recommendation:</b> HIGH PRIORITY. Days 3-4 hub.]]></description>
+        <styleUrl>#transport</styleUrl>
+        <Point><coordinates>140.993493,43.197183,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Dormy Inn Premium Otaru</name>
+        <description><![CDATA[<b>Category:</b> Lodging<br><b>Dates:</b> Days 3-4 (March 4-5)<br><b>Best Time:</b> Check-in evening Day 3<br><b>Price:</b> $174.46<br><b>Features:</b> Right by Otaru Station. Has a natural hot spring bath, which is a nice recovery option after a ski day.<br><b>Recommendation:</b> HIGH PRIORITY. Location and hot spring make it ideal for the ski day.]]></description>
+        <styleUrl>#lodging</styleUrl>
+        <Point><coordinates>140.994862971236,43.19855800765682,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Otaru Canal</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Days 3-4 (March 4-5)<br><b>Best Time:</b> Late afternoon into blue hour. Day 4 sunset is the main shoot.<br><b>Price:</b> Free<br><b>Features:</b> The anchor shot for Otaru. Stone warehouses, gas lamps, and canal reflections.<br><b>Recommendation:</b> HIGH PRIORITY. This is THE Otaru shot. Plan Day 4 around sunset here.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.00211119835436,43.199276623684014,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Otaru Sushi Street</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Day 3 (March 4)<br><b>Best Time:</b> Dinner<br><b>Price:</b> ¥2,000-5,000 per meal<br><b>Features:</b> A whole street of sushi restaurants serving ultra-fresh Hokkaido seafood.<br><b>Recommendation:</b> RECOMMENDED. Day 3 Dinner. Your fresh Hokkaido seafood story.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>140.99912608753434,43.19502862439303,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Temiya Line Ruins</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Day 3 (March 4)<br><b>Best Time:</b> Twilight (before full dark)<br><b>Price:</b> Free<br><b>Features:</b> Old railway line turned walking path. Snow on the tracks, quiet, moody.<br><b>Recommendation:</b> MEDIUM PRIORITY. Moody B-roll. Good option for quick shoot on arrival.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>140.99869339144993,43.199236207741784,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+
+    <!-- Day 4 (Mar 5) — Otaru + Ski -->
+    <Folder>
+      <name>Day 4 (Mar 5) — Otaru + Ski</name>
+      <Placemark>
+        <name>Asari Ski Resort</name>
+        <description><![CDATA[<b>Category:</b> Winter Activity<br><b>Dates:</b> Day 4 (March 5)<br><b>Best Time:</b> Weekdays 9:00-17:00<br><b>Price:</b> ¥5,500 day pass<br><b>Features:</b> 9 runs with Sea of Japan views. Longest run: 9,000 feet. 8-15 min by taxi from central Otaru.<br><b>Recommendation:</b> RECOMMENDED. Day 4 ski content. 15 minutes from Otaru, ocean views.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.0367359,43.1435073,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Sakaimachi Street</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 4 (March 5)<br><b>Best Time:</b> Late afternoon before sunset<br><b>Price:</b> Free (street), shops vary<br><b>Features:</b> The main tourist street connecting the canal to the glass and music box shops.<br><b>Recommendation:</b> Good story for Otaru coverage. Use for transitions and context.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.007086,43.192021,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Denuki Koji</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Day 4 (March 5)<br><b>Best Time:</b> Evening (after 6pm for full atmosphere)<br><b>Price:</b> Free entry, food costs vary<br><b>Features:</b> Narrow alley food court with lanterns and steam. Feels local, not polished.<br><b>Recommendation:</b> HIGH PRIORITY. Best night food option. Casual, visual, authentic.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.00272476891473,43.19757666791645,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Kitaichi Glass</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Day 4 (March 5)<br><b>Best Time:</b> Before 6pm<br><b>Price:</b> Free to browse, workshops extra<br><b>Features:</b> Historic glassworks with multiple buildings along Sakaimachi.<br><b>Recommendation:</b> MEDIUM PRIORITY. Quick stop on Sakaimachi. Good visuals but not essential.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.007249425148,43.19229663908901,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Otaru Music Box Museum</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Day 4 (March 5)<br><b>Best Time:</b> Afternoon<br><b>Price:</b> Free to browse<br><b>Features:</b> Multi-story museum/shop packed with music boxes. Steam clock outside marks the hour.<br><b>Recommendation:</b> MEDIUM PRIORITY. Quick texture stop. Don't spend more than 15-20 min.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.00330604508085,43.1962496615268,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Tanaka Sake Brewery</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Day 4 (March 5)<br><b>Best Time:</b> Afternoon (check hours)<br><b>Price:</b> Free tour and tasting<br><b>Features:</b> The last sake brewery standing in Otaru. Good story option about the city's transition.<br><b>Recommendation:</b> MEDIUM PRIORITY. Good story if time allows. Skip if running behind.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.01344465483947,43.1873878439733,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Otaru Tenguyama Ropeway</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Day 4 (March 5)<br><b>Best Time:</b> Evening for night view<br><b>Price:</b> ~¥1,400 round trip<br><b>Features:</b> Night view rival to Hakodate, but less famous.<br><b>Recommendation:</b> Backup night view option. Don't prioritize over canal sunset.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>140.97530159751818,43.17778972558791,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+
+    <!-- Days 5-6 (Mar 6-7) — Sapporo Flex -->
+    <Folder>
+      <name>Days 5-6 (Mar 6-7) — Sapporo Flex</name>
+      <Placemark>
+        <name>Sapporo Station</name>
+        <description><![CDATA[<b>Category:</b> Transport Hub<br><b>Dates:</b> Days 4-7 (March 5-8)<br><b>Best Time:</b> Any<br><b>Price:</b> Free<br><b>Features:</b> Your final hub. Big modern station with shopping and restaurants.<br><b>Recommendation:</b> REQUIRED STOP. Days 5-7 hub.]]></description>
+        <styleUrl>#transport</styleUrl>
+        <Point><coordinates>141.3508,43.0686,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Richmond Hotel Sapporo Ekimae</name>
+        <description><![CDATA[<b>Category:</b> Lodging<br><b>Dates:</b> Days 4-7 (March 5-8)<br><b>Best Time:</b> Check-in evening Day 4<br><b>Price:</b> $498.72<br><b>Features:</b> Modern hotel in central Sapporo, walking distance to Susukino entertainment district and Odori Park.<br><b>Recommendation:</b> Central location for all Sapporo content.]]></description>
+        <styleUrl>#lodging</styleUrl>
+        <Point><coordinates>141.35556745409275,43.0650918729171,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Mount Moiwa Ropeway</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Days 4-6 (March 5-7)<br><b>Best Time:</b> Winter schedule: Last ascent 9:30 PM<br><b>Price:</b> ¥2,100 round trip<br><b>Features:</b> One of Japan's 'New Top 3 Night Views' on top of a 1,742 foot summit with 360° views.<br><b>Recommendation:</b> Attempt on your first day in Sapporo. If you get bad weather, you have two more days.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.3331003811216,43.031916761476964,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Sapporo Beer Museum</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> 11:00-18:00 (last entry 17:30)<br><b>Price:</b> Free (self-guided)<br><b>Features:</b> Japan's only beer museum. Covers the history of Sapporo Beer, which was founded in 1876.<br><b>Recommendation:</b> Sapporo core content. Contact them for filming permission.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.36899837722018,43.0719970762073,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Sapporo Beer Garden</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> 11:30-21:00 (last order 20:40)<br><b>Price:</b> ¥3,000-5,000/person typical<br><b>Features:</b> Historic 1890 red brick brewery. All-you-can-eat Jingisukan (lamb BBQ) plus unlimited beer.<br><b>Recommendation:</b> Jingisukan plus beer experience. Book a reservation now.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.369152,43.071231,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Nijo Market</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Generally 7:00-18:00<br><b>Price:</b> Free to walk, food purchases vary<br><b>Features:</b> Century-old fish market in downtown Sapporo. Less touristy than Hakodate's morning market.<br><b>Recommendation:</b> Can't go wrong with market clips.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.35824215662961,43.05844005106171,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Ganso Sapporo Ramen Yokocho</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Evening (6:00-10:00 PM)<br><b>Price:</b> ¥800-1,500 per bowl<br><b>Features:</b> The birthplace of miso ramen. 17 tiny ramen shops crammed into a narrow alley.<br><b>Recommendation:</b> RECOMMENDED.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.3543545911063,43.05493899565314,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Former Hokkaido Government Office</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> 8:45-18:00<br><b>Price:</b> Free<br><b>Features:</b> Red brick building from 1888, recently reopened after renovation. American neo-Baroque style.<br><b>Recommendation:</b> Quick walk from the hotel for Hokkaido history visual.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.34677878206926,43.06445794297808,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Historical Village of Hokkaido</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Morning to midday (9am-3pm)<br><b>Price:</b> ¥1,000 (~$7)<br><b>Features:</b> 54-hectare open-air museum with 52 historic buildings from the Meiji/Taisho periods.<br><b>Recommendation:</b> RECOMMENDED. Day 6 morning.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.4889,43.0528,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>JR Tower T38 Observation Deck</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> 10:00-22:00 (last entry 21:30)<br><b>Price:</b> ¥1,000<br><b>Features:</b> 38th floor observation deck in JR Tower. Indoor backup if Mt. Moiwa gets weathered out.<br><b>Recommendation:</b> Backup night view if Mt. Moiwa is closed. Indoor and reliable.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.3508,43.0687,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Soup Curry GARAKU</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Dinner (5pm-11:30pm)<br><b>Price:</b> ¥1,100-1,500<br><b>Features:</b> One of Sapporo's most famous soup curry spots. Signature whole chicken leg in the curry.<br><b>Recommendation:</b> CONDITIONAL. Tourist favorite, but the lines are 30-60 minutes.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.36001351833326,43.05867800664518,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Sapporo Ramen Haruka</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Evening. Closed Tuesdays.<br><b>Price:</b> ~¥1,000/bowl<br><b>Features:</b> Tiny shop inside Ramen Yokocho. Known for miso cheese ramen with Hokkaido Camembert.<br><b>Recommendation:</b> Very popular, lines can spike at dinner. Go outside of normal lunch/dinner times.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.35432638337193,43.05496284198638,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Kifuh Susukino</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> 11am-5am (until 6am Fri/Sat)<br><b>Price:</b> ~¥990/bowl<br><b>Features:</b> Strong miso ramen near Susukino intersection. Counter-only, about 11 seats. The 'rich miso' is the one to get.<br><b>Recommendation:</b> Local pick for rich miso ramen. Open super late.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.354732649029,43.0544344278429,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>MASAJIN</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Dinner only (5pm-11pm or midnight)<br><b>Price:</b> ~¥3,000-¥6,000/person<br><b>Features:</b> Small spot with about 18 seats in Susukino. Sapporo-style jingisukan (unseasoned meat, dip in sauce after cooking).<br><b>Recommendation:</b> Expect a 30-60 min wait during peak hours. Go right at opening.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.35129866098114,43.05561799051129,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Menme</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Dinner only: 5pm-11:30pm, closed Sunday<br><b>Price:</b> ¥3,000-5,000<br><b>Features:</b> Local recommendation from a former Sapporo resident. Order 'kinki' (thornyhead rockfish).<br><b>Recommendation:</b> This recommendation is about 20 years old, some negative experiences reported.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.34936284230122,43.056538372705454,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Nemuro Hanamaru</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> 11am-10pm daily. Avoid peak hours.<br><b>Price:</b> ¥1,500-3,000<br><b>Features:</b> Conveyor belt, high quality sushi. Fresh Hokkaido seafood at reasonable prices. TAMRON team location.<br><b>Recommendation:</b> Expect 30-60 min wait during peak hours, so go slightly off-peak.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.35173171769463,43.064920664220494,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Susukino Station/Entertainment District</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Evening/Night<br><b>Price:</b> Free<br><b>Features:</b> Sapporo's main entertainment district. Neon lights, restaurants, bars, and nightlife.<br><b>Recommendation:</b> Central hub for Sapporo nightlife and dining.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.3533158407925,43.05547124911046,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Jozankei Onsen</name>
+        <description><![CDATA[<b>Category:</b> Onsen/Hot Spring<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Afternoon to evening<br><b>Price:</b> Free to walk; Ryokan day-use ¥1,000-2,000<br><b>Features:</b> Hokkaido's largest hot spring town. 2.4 million visitors per year.<br><b>Recommendation:</b> MEDIUM PRIORITY. Nice half-day escape but not essential.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.1667,42.9697,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Okurayama Ski Jump Stadium</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Daytime for views<br><b>Price:</b> ¥1,000 (lift + museum)<br><b>Features:</b> 1972 Winter Olympics venue. Dramatic view down the ski jump. Museum inside.<br><b>Recommendation:</b> Day 6 flex option. Strong visual if you want the 1972 Olympics angle.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.307117447222,43.0555268027778,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Moerenuma Park</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Daytime<br><b>Price:</b> Free<br><b>Features:</b> Modern park designed by Isamu Noguchi. The glass pyramid (Hidamari) is the hero shot.<br><b>Recommendation:</b> Further out option. Glass pyramid is a unique visual if you have time.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.414482586111,43.124030975,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Hitsujigaoka Observation Hill</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Daytime, clear weather<br><b>Price:</b> ¥530<br><b>Features:</b> 'Sheep Hill' with famous Dr. William Clark statue. 'Boys, be ambitious!' Open snowfield views.<br><b>Recommendation:</b> Quick scene option. Ties into the lamb/jingisukan thread.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.3944751186895,42.99920153693397,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Tanukikoji Shopping Street</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> Evening for atmosphere<br><b>Price:</b> Free<br><b>Features:</b> Covered arcade good for night b-roll. Good for walk-and-talk shots.<br><b>Recommendation:</b> Weather-proof option. Good for transitions and street texture.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.35263409110368,43.05740316790249,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Shiroi Koibito Park</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> 10:00 AM - 5:00 PM<br><b>Price:</b> ¥800<br><b>Features:</b> Chocolate factory theme park that's kind of weird in a good way on camera.<br><b>Recommendation:</b> Optional / Extra Time. The long Uber ride leans me to skip it.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.27176858224558,43.08908659185456,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Chitosetsuru Sake Museum</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Days 5-6 (March 6-7)<br><b>Best Time:</b> 10:00 AM - 6:00 PM<br><b>Price:</b> Free (tastings available)<br><b>Features:</b> The only sake brewery in central Sapporo.<br><b>Recommendation:</b> Indoor backup. Quick sake story if you need it.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.3644648216565,43.059386382566544,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Oyunuma Pond &amp; Natural Footbath</name>
+        <description><![CDATA[<b>Category:</b> Onsen/Hot Spring<br><b>Dates:</b> Day 5-6<br><b>Best Time:</b> Morning for steam effects<br><b>Price:</b> Free<br><b>Features:</b> A sulfuric pond where the surface temperature is 50°C. Natural footbath along the banks.<br><b>Recommendation:</b> CONDITIONAL. Only makes sense if you're already doing Noboribetsu.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.1483,42.4978,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+
+    <!-- Day 7 (Mar 8) — Sapporo → Departure -->
+    <Folder>
+      <name>Day 7 (Mar 8) — Sapporo → Departure</name>
+      <Placemark>
+        <name>New Chitose Airport</name>
+        <description><![CDATA[<b>Category:</b> Transport Hub<br><b>Dates:</b> Day 7 (March 8)<br><b>Best Time:</b> Morning departure<br><b>Price:</b> Free<br><b>Features:</b> Sapporo's main airport. Has a hot spring bath, Royce chocolate factory tour, and ramen food court.<br><b>Recommendation:</b> DEPARTURE POINT. Day 7 exit.]]></description>
+        <styleUrl>#transport</styleUrl>
+        <Point><coordinates>141.6925,42.7752,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Odori Park</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Day 7 (March 8)<br><b>Best Time:</b> Daytime for park strolls; evening for illuminated TV Tower views<br><b>Price:</b> Free<br><b>Features:</b> A 1.5km urban park running through the center of Sapporo, spanning 12 blocks.<br><b>Recommendation:</b> RECOMMENDED. Central park, good for establishing shots and transitions.]]></description>
+        <styleUrl>#high-priority</styleUrl>
+        <Point><coordinates>141.3544738255664,43.060877393721555,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Sapporo TV Tower</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Day 7 (March 8)<br><b>Best Time:</b> Dusk for city lights transition<br><b>Price:</b> ¥1,000 (~$7)<br><b>Features:</b> 147m tower at the east end of Odori Park. Observation deck at 90m with 360-degree city views.<br><b>Recommendation:</b> MEDIUM PRIORITY. Skip unless you need filler content.]]></description>
+        <styleUrl>#medium-priority</styleUrl>
+        <Point><coordinates>141.3564675223638,43.06126925560849,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+
+    <!-- Not This Trip / Future Ideas -->
+    <Folder>
+      <name>Not This Trip / Future Ideas</name>
+      <Placemark>
+        <name>Ginzan Onsen</name>
+        <description><![CDATA[<b>Category:</b> Onsen/Hot Spring<br><b>Dates:</b> Optional<br><b>Best Time:</b> Blue hour and night (5:00-8:00 PM)<br><b>Price:</b> Free to walk; Ryokan ¥25,000-50,000/night<br><b>Features:</b> Supposedly the town that inspired the bathhouse in Spirited Away. Old wooden buildings from the 1920s lit by gas lamps.<br><b>Recommendation:</b> NOT RECOMMENDED THIS TRIP. Should be the centerpiece of a future Tohoku episode.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.5311,38.5697,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Zao Onsen - Snow Monsters</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Optional<br><b>Best Time:</b> Night ropeway (5:00-9:00 PM) or dawn<br><b>Price:</b> Ropeway ¥3,500 (~$24)<br><b>Features:</b> Trees completely encased in ice and snow that look like alien creatures. 'Juhyo' (snow monsters).<br><b>Recommendation:</b> NOT RECOMMENDED THIS TRIP. You're going in March when they might already be melting.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.3956670088516,38.16506390482376,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Sendai - Zuihoden Mausoleum</name>
+        <description><![CDATA[<b>Category:</b> Architecture<br><b>Dates:</b> Optional<br><b>Best Time:</b> Morning (9:00-11:00 AM)<br><b>Price:</b> ¥570 (~$4)<br><b>Features:</b> Mausoleum of Date Masamune, a famous one-eyed samurai lord.<br><b>Recommendation:</b> NOT RECOMMENDED THIS TRIP. Would require Sendai stopover.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.86670734474708,38.2505346105803,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Sendai - Gyutan Restaurant Row</name>
+        <description><![CDATA[<b>Category:</b> Food/Culture<br><b>Dates:</b> Optional<br><b>Best Time:</b> Lunch service (11:30 AM - 1:30 PM)<br><b>Price:</b> ¥1,500-2,500 per meal (~$10-17)<br><b>Features:</b> Sendai's signature dish is gyutan. Thick-cut grilled beef tongue.<br><b>Recommendation:</b> NOT RECOMMENDED THIS TRIP. Would require Sendai stopover.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.8821,38.2603,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Sendai Station</name>
+        <description><![CDATA[<b>Category:</b> Transport Hub<br><b>Dates:</b> Optional<br><b>Best Time:</b> Transit stop<br><b>Price:</b> Free<br><b>Features:</b> Major Shinkansen hub in Tohoku. Pass-through on the way north.<br><b>Recommendation:</b> NOT RECOMMENDED THIS TRIP. Pass-through station only.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.882516,38.26067,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Onuma Quasi-National Park</name>
+        <description><![CDATA[<b>Category:</b> Winter Activity<br><b>Dates:</b> Optional<br><b>Best Time:</b> Morning for activities; afternoon for Mt. Komagatake<br><b>Price:</b> Free entry; Activities ¥600-3,000<br><b>Features:</b> In winter, the lake freezes. You can do wakasagi ice fishing, horse-drawn sleigh rides, snowmobiling.<br><b>Recommendation:</b> NOT RECOMMENDED THIS TRIP. March might look muddy and dead as snow begins to melt.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.67209056046022,41.98397484544972,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Noboribetsu Hell Valley</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Optional<br><b>Best Time:</b> Any - steam is dramatic always<br><b>Price:</b> Free; Parking ¥500<br><b>Features:</b> A volcanic crater valley with steam vents everywhere, sulfurous streams.<br><b>Recommendation:</b> NOT RECOMMENDED. Dramatic but not on the direct Hakodate→Otaru route. You'd need to detour.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>141.1478,42.4933,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Lake Toya</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Optional<br><b>Best Time:</b> Morning for Mount Yotei reflections<br><b>Price:</b> Free<br><b>Features:</b> A caldera lake with views of Mount Yotei, 'Hokkaido's Fuji'.<br><b>Recommendation:</b> NOT RECOMMENDED. Only makes sense if routing through Noboribetsu area.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.8567,42.6103,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Mount Yotei</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Optional<br><b>Best Time:</b> Clear morning for sunrise on peak<br><b>Price:</b> Free (viewing)<br><b>Features:</b> A 1,898m perfectly symmetrical volcanic cone that looks like Mt. Fuji's little brother.<br><b>Recommendation:</b> NOT RECOMMENDED.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.8119,42.8264,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Showa Shinzan</name>
+        <description><![CDATA[<b>Category:</b> Landscape/Nature<br><b>Dates:</b> Optional<br><b>Best Time:</b> Any - steam always visible<br><b>Price:</b> Free viewing; Usuzan Ropeway ¥1,800<br><b>Features:</b> A 'young volcano' that literally didn't exist until 1943. It grew during WWII and is still growing.<br><b>Recommendation:</b> NOT RECOMMENDED. Only if you're doing the Lake Toya route.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.8583,42.5428,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Niseko United Ski Resort</name>
+        <description><![CDATA[<b>Category:</b> Winter Activity<br><b>Dates:</b> Optional<br><b>Best Time:</b> Morning for fresh powder<br><b>Price:</b> Day pass ¥7,500-8,500 (~$50-57)<br><b>Features:</b> Japan's most famous international ski resort. 590 inches of ultra-dry powder annually.<br><b>Recommendation:</b> NOT RECOMMENDED THIS TRIP. World-class powder skiing, but it's 2-2.5 hours from Sapporo.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.7000,42.8633,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>Rusutsu Resort</name>
+        <description><![CDATA[<b>Category:</b> Winter Activity<br><b>Dates:</b> Optional<br><b>Best Time:</b> Any - less crowded than Niseko<br><b>Price:</b> Day pass ¥6,500 (~$44)<br><b>Features:</b> Often rated Hokkaido's best ski resort. 550 inches of powder. Less crowded than Niseko.<br><b>Recommendation:</b> NOT RECOMMENDED.]]></description>
+        <styleUrl>#not-recommended</styleUrl>
+        <Point><coordinates>140.9003,42.7489,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+
+    <!-- Routes -->
+    <Folder>
+      <name>Routes</name>
+      <Placemark>
+        <name>Day 1: Tokyo → Morioka (Hayabusa Shinkansen)</name>
+        <description><![CDATA[<b>Mode:</b> Hayabusa Shinkansen<br><b>Duration:</b> ~2h12<br><b>Cost:</b> Included in JR Pass]]></description>
+        <styleUrl>#route-line</styleUrl>
+        <LineString>
+          <coordinates>139.76716,35.679183,0 141.1345,39.7016,0</coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Day 2: Morioka → Shin-Hakodate-Hokuto (Hayabusa Shinkansen)</name>
+        <description><![CDATA[<b>Mode:</b> Hayabusa Shinkansen<br><b>Duration:</b> ~1h46<br><b>Cost:</b> Included in JR Pass<br><b>Notes:</b> Route through Seikan Tunnel]]></description>
+        <styleUrl>#route-line</styleUrl>
+        <LineString>
+          <coordinates>141.1345,39.7016,0 140.3167,41.3167,0 140.646389,41.905278,0</coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Day 2: Shin-Hakodate-Hokuto → Hakodate (Hakodate Liner)</name>
+        <description><![CDATA[<b>Mode:</b> Hakodate Liner<br><b>Duration:</b> 15-22 min<br><b>Cost:</b> ¥360]]></description>
+        <styleUrl>#route-line</styleUrl>
+        <LineString>
+          <coordinates>140.6478,41.9044,0 140.7281,41.7731,0</coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Day 3: Hakodate → Otaru (Ltd. Exp. Hokuto 11 → Airport Train 123)</name>
+        <description><![CDATA[<b>Mode:</b> Ltd. Exp. Hokuto 11 → Airport Train 123<br><b>Duration:</b> 4h 49min<br><b>Cost:</b> ¥10,940<br><b>Notes:</b> 12:15 depart → 17:04 arrive. Transfer at Minami-Chitose.]]></description>
+        <styleUrl>#route-line</styleUrl>
+        <LineString>
+          <coordinates>140.7281,41.7731,0 141.6778,42.7894,0 140.993493,43.197183,0</coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Day 4: Otaru → Sapporo (JR Hakodate Line)</name>
+        <description><![CDATA[<b>Mode:</b> JR Hakodate Line<br><b>Duration:</b> 30 min rapid<br><b>Cost:</b> ¥800<br><b>Notes:</b> Runs every 20 min]]></description>
+        <styleUrl>#route-line</styleUrl>
+        <LineString>
+          <coordinates>140.993493,43.197183,0 141.3508,43.0686,0</coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Day 7: Sapporo → New Chitose Airport (JR Rapid Airport)</name>
+        <description><![CDATA[<b>Mode:</b> JR Rapid Airport<br><b>Duration:</b> ~37 min<br><b>Cost:</b> ¥1,150]]></description>
+        <styleUrl>#route-line</styleUrl>
+        <LineString>
+          <coordinates>141.3508,43.0686,0 141.6925,42.7752,0</coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+
+  </Document>
+</kml>
