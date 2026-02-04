@@ -2654,7 +2654,7 @@
                                 <input type="text" class="editable-field" value="${bestTime}" style="display:none;">
                             </div>
                             <div class="popup-meta-item" data-field="admission">
-                                <label>Admission</label>
+                                <label>Price</label>
                                 <span>${admission}</span>
                                 <input type="text" class="editable-field" value="${admission}" style="display:none;">
                             </div>
@@ -3590,7 +3590,7 @@
             const fieldLabels = {
                 dates: 'Dates',
                 bestTime: 'Best Time',
-                admission: 'Admission',
+                admission: 'Price',
                 permits: 'Permits',
                 features: 'Features',
                 notes: 'Production Notes',
@@ -3618,7 +3618,7 @@
                     changes.push({ field: 'bestTime', label: 'Best Time', value: edits.bestTime });
                 }
                 if (edits.admission !== loc.admission) {
-                    changes.push({ field: 'admission', label: 'Admission', value: edits.admission });
+                    changes.push({ field: 'admission', label: 'Price', value: edits.admission });
                 }
                 if (edits.permits !== loc.permits) {
                     changes.push({ field: 'permits', label: 'Permits', value: edits.permits });
